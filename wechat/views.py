@@ -1,43 +1,19 @@
 import json
-import hashlib
 from django.http import HttpResponse
-
-
-class ValidateToken:
-
-    def __init__(self):
-        self.token = 'lkyn20180403'
-        self.signature = None
-        self.bool = False
-
-    def get_signature(self, timestamp, nonce):
-        """获取token加密签名"""
-        tmp = [self.token, timestamp, nonce]
-        tmp.sort()
-        str = ''.join(tmp).encode(encoding='UTF-8')
-        self.signature = hashlib.sha1(str).hexdigest()
-
-    def check_signature(self, param):
-        """检测token加密签名是否正确"""
-        self.get_signature(param.get('timestamp'), param.get('nonce'))
-
-        if self.signature == param.get('signature'):
-            self.bool = True
-
-        return self.bool
+from wechat.api import wechat
 
 
 def index(req):
     result = {'code': 404, 'data': {}}
 
-    if req.method == 'GET':
-        check = ValidateToken()
+    if req.method == 'GET' and req.GET:
+        check = wechat.Validate()
         val = check.check_signature(req.GET)
         result['code'] = 200
         result['method'] = 'get'
         result['data']['bool'] = val
 
-    if req.method == 'POST':
+    if req.method == 'POST' and req.POST:
         result['code'] = 200
         result['method'] = 'post'
 

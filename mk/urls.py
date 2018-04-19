@@ -20,7 +20,7 @@ from wechat import views
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
-    url(r'^validate/token', views.index),
+    url(r'^api/validate_token', views.index),
 ]
 
 handler404 = views.page_not_found

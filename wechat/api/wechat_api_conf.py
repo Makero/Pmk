@@ -1,0 +1,3 @@
+WX_TOKEN = 'lkyn20180403'
+WX_SIGNATURE = None
+WX_BOOL = False
