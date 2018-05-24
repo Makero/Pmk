@@ -16,6 +16,7 @@ Including another URLconf
 from django.conf.urls import url, handler404
 from django.contrib import admin
 from wechat import views
+from access import views as vs
 
 
 urlpatterns = [

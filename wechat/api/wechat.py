@@ -1,5 +1,5 @@
 import hashlib
-from wechat.request import request as req
+from utils.request import request as req
 from wechat.api import wechat_api_conf as wx
 
 
@@ -34,12 +34,20 @@ class AccessToken:
         self.data = {
             'grant_type': 'client_credential',
             'appid': wx.APP_ID,
-            'secret': wx.APP_SECRET
+            'secret': wx.APP_SECRET,
         }
 
-    def get_token(self):
+    def get(self):
         """获取access_token"""
-        return req.api_get({
+        result = req.get_api({
             'url': self.url,
-            'data': self.data
+            'data': self.data,
         })
+        # if result['access_token']:
+        #     rs = redis.Redis()
+        #     rs.set_redis(name='wechat', key='access_token', value=result['access_token'])
+        #     data = {"code": 200, "msg": "success"}
+        # else:
+        #     data = {"code": result['errcode'], "msg": result['errmsg']}
+
+        return result

@@ -22,8 +22,8 @@ def index(req):
 
 def get_token(req):
     token = wechat.AccessToken()
-    data = token.get_token()
-    return HttpResponse(data)
+    data = token.get()
+    return HttpResponse(json.dumps(data))
 
 
 

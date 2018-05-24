@@ -1,15 +1,16 @@
 import ssl
+import json
 import urllib.request as request
 import urllib.parse as parse
 
 
-def api_get(params):
+def get_api(params):
     data = parse.urlencode(params['data'])
     url = params['url'] + "?" + data
     context = ssl._create_unverified_context()
     result = request.urlopen(url, context=context).read().decode('utf-8')
-    return result
+    return json.loads(result)
 
 
-def api_post(params):
+def post_api(params):
     pass
