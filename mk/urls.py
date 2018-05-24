@@ -16,13 +16,11 @@ Including another URLconf
 from django.conf.urls import url, handler404
 from django.contrib import admin
 from wechat import views
-from access import views as vs
 
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^api/validate_token', views.index),
-    url(r'^api/get_token', views.get_token),
 ]
 
 handler404 = views.page_not_found

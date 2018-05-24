@@ -1,4 +1,4 @@
-flag = 'local'
+flag = 'aliyun'
 
 params = {
     'local': {
@@ -8,7 +8,7 @@ params = {
         'db': 0,
     },
     'aliyun': {
-        'host': 'localhost',
+        'host': '47.93.198.225',
         'password': '2018maker<&>',
         'port': 6379,
         'db': 0,

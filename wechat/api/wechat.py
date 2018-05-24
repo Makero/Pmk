@@ -43,11 +43,4 @@ class AccessToken:
             'url': self.url,
             'data': self.data,
         })
-        # if result['access_token']:
-        #     rs = redis.Redis()
-        #     rs.set_redis(name='wechat', key='access_token', value=result['access_token'])
-        #     data = {"code": 200, "msg": "success"}
-        # else:
-        #     data = {"code": result['errcode'], "msg": result['errmsg']}
-
         return result

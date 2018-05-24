@@ -2,7 +2,7 @@ import redis
 from utils.redis import redis_conf as rc
 
 
-class Redis():
+class Redis:
 
     def __init__(self):
         self.host = rc.params[rc.flag]['host']
