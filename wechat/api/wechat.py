@@ -1,13 +1,14 @@
 import hashlib
+from wechat.request import request as req
 from wechat.api import wechat_api_conf as wx
 
 
 class Validate:
 
     def __init__(self):
-        self.token = wx.WX_TOKEN
-        self.signature = wx.WX_SIGNATURE
-        self.bool = wx.WX_BOOL
+        self.token = wx.TOKEN
+        self.signature = None
+        self.bool = False
 
     def get_signature(self, timestamp, nonce):
         """获取token加密签名"""
@@ -24,3 +25,21 @@ class Validate:
             self.bool = True
 
         return self.bool
+
+
+class AccessToken:
+
+    def __init__(self):
+        self.url = wx.API_URL['access_token']
+        self.data = {
+            'grant_type': 'client_credential',
+            'appid': wx.APP_ID,
+            'secret': wx.APP_SECRET
+        }
+
+    def get_token(self):
+        """获取access_token"""
+        return req.api_get({
+            'url': self.url,
+            'data': self.data
+        })

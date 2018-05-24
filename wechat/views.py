@@ -20,6 +20,13 @@ def index(req):
     return HttpResponse(json.dumps(result))
 
 
+def get_token(req):
+    token = wechat.AccessToken()
+    data = token.get_token()
+    return HttpResponse(data)
+
+
+
 def page_not_found():
 
     data = {'code': 404, 'data': {}}
