@@ -1,7 +1,15 @@
+##############################################
+#
+# 启动一个进程无限循环定时刷新access_token
+# access_token存储到redis缓存中
+# 刷新时间为 5400s,如果异常将退出循环
+# 如果系统繁忙，将每10s再次发起请求
+#
+##############################################
 import time
 from threading import Thread
+from utils.api import wechat
 from utils.redis import redis
-from wechat.api import wechat
 
 
 class TimedRefresh:
@@ -28,7 +36,7 @@ class TimedRefresh:
                 sec = __sec
                 rs = redis.Redis()
                 rs.set_redis(name='wechat', key='access_token', value=result['access_token'])
-                print("\033[1;32m 刷新获取的 access_token 写入缓存成功\033[0m")
+                print("\033[1;32m 刷新获取的 access_token 写入缓存 成功\033[0m")
 
             time.sleep(sec)
 

@@ -1,6 +1,7 @@
 import json
 from django.http import HttpResponse
-from wechat.api import wechat
+from utils.api import wechat
+from utils.redis import redis
 
 
 def index(req):
@@ -18,6 +19,11 @@ def index(req):
         result['method'] = 'post'
 
     return HttpResponse(json.dumps(result))
+
+def access(req):
+    rs = redis.Redis()
+    result = rs.get_redis(name="wechat", key="access_token")
+    return HttpResponse(result)
 
 def page_not_found(req):
 

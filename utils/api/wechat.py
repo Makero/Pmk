@@ -1,10 +1,15 @@
+###########################
+#
+# 微信API调用的方法
+#
+###########################
 import hashlib
+from utils.api import wechat_api_conf as wx
 from utils.request import request as req
-from wechat.api import wechat_api_conf as wx
 
 
 class Validate:
-
+    """验证类"""
     def __init__(self):
         self.token = wx.TOKEN
         self.signature = None
@@ -28,7 +33,7 @@ class Validate:
 
 
 class AccessToken:
-
+    """获取access_token类"""
     def __init__(self):
         self.url = wx.API_URL['access_token']
         self.data = {
