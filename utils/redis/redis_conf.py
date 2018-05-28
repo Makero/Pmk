@@ -4,7 +4,7 @@
 #
 #######################
 
-flag = 'local'
+flag = 'aliyun'
 
 params = {
     'local': {

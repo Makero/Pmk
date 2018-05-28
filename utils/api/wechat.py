@@ -4,6 +4,7 @@
 #
 ###########################
 import hashlib
+import time
 from utils.api import wechat_api_conf as wx
 from utils.request import request as req
 
@@ -49,3 +50,44 @@ class AccessToken:
             'data': self.data,
         })
         return result
+
+
+class Message:
+    def __init__(self, params):
+        self.data = {
+            'ToUserName': params['FromUserName[0]'],
+            'FromUserName': params['ToUserName[0]'],
+            'CreateTime': int(time.time()),
+            'MsgType': None
+        }
+
+    def reply_text(self, content):
+        self.data['MsgType'] = 'text'
+        self.data['Content'] = content
+
+    def reply_image(self, media_id):
+        self.data['MsgType'] = 'image'
+        self.data['MediaId'] = media_id
+
+    def reply_voice(self, media_id):
+        self.data['MsgType'] = 'voice'
+        self.data['MediaId'] = media_id
+
+    def reply_video(self, media_id, title=None, description=None):
+        self.data['MsgType'] = 'video'
+        self.data['MediaId'] = media_id
+        self.data['Title'] = title
+        self.data['Description'] = description
+
+    def reply_music(self, thumb_media_id, title=None, description=None, music_url=None, hq_music_url=None):
+        self.data['MsgType'] = 'music'
+        self.data['Title'] = title
+        self.data['Description'] = description
+        self.data['MusicURL'] = music_url
+        self.data['HQMusicUrl'] = hq_music_url
+        self.data['ThumbMediaId'] = thumb_media_id
+
+    def reply_news(self, params):
+        self.data['MsgType'] = 'news'
+        self.data['ArticleCount'] = params['ArticleCount']
+        self.data['Articles'] = params['Articles']
