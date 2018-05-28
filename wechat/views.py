@@ -35,22 +35,28 @@ def handle(req):
         content = "成功啦！哈哈哈～😄"
 
     msg = wechat.Message(req.GET)
-    '''
-    msg.reply_news({
-        'ArticleCount': 1,
-        'Articles': [
-            {
-                'Title': '测试图文',
-                'Description': '测试描述',
-                'PicUrl': 'https://mmbiz.qpic.cn/mmbiz_jpg/y1nlcyGpibk2qga7aTnYp2Ficdo6L174XdHGDFLevRseWibJ32eHdFIc3F85sIYib4J9JicjYnqqdZxTCWOeW4FZGdg/0?wx_fmt=jpeg',
-                'Url': 'https://mp.weixin.qq.com/wiki?t=resource/res_main&id=mp1444738726'
-             }
-        ],
 
+    msg.reply_news({
+        'ArticleCount': 2,
+        'Articles': {
+            'item':[
+                {
+                    'Title': '测试图文1',
+                    'Description': '测试描述',
+                    'PicUrl': 'https://mmbiz.qpic.cn/mmbiz_jpg/y1nlcyGpibk2qga7aTnYp2Ficdo6L174XdHGDFLevRseWibJ32eHdFIc3F85sIYib4J9JicjYnqqdZxTCWOeW4FZGdg/0?wx_fmt=jpeg',
+                    'Url': 'https://mp.weixin.qq.com/wiki?t=resource/res_main&id=mp1444738726'
+                },
+                {
+                    'Title': '测试图文2',
+                    'Description': '测试描述2',
+                    'PicUrl': 'https://mmbiz.qpic.cn/mmbiz_jpg/y1nlcyGpibk2qga7aTnYp2Ficdo6L174XdHGDFLevRseWibJ32eHdFIc3F85sIYib4J9JicjYnqqdZxTCWOeW4FZGdg/0?wx_fmt=jpeg',
+                    'Url': 'https://mp.weixin.qq.com/wiki?t=resource/res_main&id=mp1444738726'
+                }
+            ],
+        }
     })
-    '''
+
 # msg.reply_text(content)
-    msg.reply_image('LCBbOH4e-Pa68zj-4KqCCPf1j_XEHlBT5y50my8HBVJcfEfDeiID0YDyvBI3VpGT')
     data = {
         'code': 200,
         'data': msg.data
