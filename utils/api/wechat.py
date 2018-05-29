@@ -5,7 +5,7 @@
 ###########################
 import hashlib
 import time
-from utils.api import wechat_api_conf as wx
+from utils.api import wechat_conf as wx
 from utils.request import request as req
 
 
@@ -53,10 +53,10 @@ class AccessToken:
 
 
 class Message:
-    def __init__(self, params):
+    def __init__(self, dicts):
         self.data = {
-            'ToUserName': params['FromUserName[0]'],
-            'FromUserName': params['ToUserName[0]'],
+            'ToUserName': dicts['FromUserName[0]'],
+            'FromUserName': dicts['ToUserName[0]'],
             'CreateTime': int(time.time()),
             'MsgType': None
         }
@@ -87,7 +87,29 @@ class Message:
         self.data['HQMusicUrl'] = hq_music_url
         self.data['ThumbMediaId'] = thumb_media_id
 
-    def reply_news(self, params):
+    def reply_news(self, dicts):
+        """
+        dicts数据格式
+        dicts = {
+            'ArticleCount': 2,
+            'Articles': {
+                'item':[
+                    {
+                        'Title': title,
+                        'Description': description,
+                        'PicUrl': pic_url,
+                        'Url': url
+                    },
+                    {
+                        'Title': title,
+                        'Description': description,
+                        'PicUrl': pic_url,
+                        'Url': url
+                    }
+                ],
+            }
+        } 
+        """
         self.data['MsgType'] = 'news'
-        self.data['ArticleCount'] = params['ArticleCount']
-        self.data['Articles'] = params['Articles']
+        self.data['ArticleCount'] = dicts['ArticleCount']
+        self.data['Articles'] = dicts['Articles']

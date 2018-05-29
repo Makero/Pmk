@@ -35,7 +35,7 @@ def handle(req):
         content = "成功啦！哈哈哈～😄"
 
     msg = wechat.Message(req.GET)
-
+    """
     msg.reply_news({
         'ArticleCount': 2,
         'Articles': {
@@ -55,13 +55,12 @@ def handle(req):
             ],
         }
     })
-
-# msg.reply_text(content)
+    """
+    msg.reply_text(content)
     data = {
         'code': 200,
         'data': msg.data
     }
-    print(data)
     return HttpResponse(json.dumps(data))
 
 
