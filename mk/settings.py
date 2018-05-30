@@ -87,15 +87,40 @@ DATABASES = {
 }
 """
 
-DATABASES = {
-    'default': {
+MYSQL_CONF = {
+    'family': {
         'ENGINE': 'django.db.backends.mysql',
+        'HOST': '192.168.0.200',
         'NAME': 'mkdb',
         'USER': 'root',
         'PASSWORD': 'maker',
-        'HOST': '127.0.0.1',
+        'PORT': '3306',
+    },
+    'aliyun': {
+        'ENGINE': 'django.db.backends.mysql',
+        'HOST': '47.93.198.225',
+        'NAME': 'mkdb',
+        'USER': 'root',
+        'PASSWORD': 'Maker123',
+        'PORT': '3306',
+    },
+    'localhost': {
+        'ENGINE': 'django.db.backends.mysql',
+        'HOST': 'localhost',
+        'NAME': 'mkdb',
+        'USER': 'root',
+        'PASSWORD': 'maker',
         'PORT': '3306',
     }
+}
+try:
+    env = os.environ['ENV']
+except KeyError:
+    env = 'localhost'
+print("\033[1;33m 当前项目连接 %s 的mysql \033[0m" %(env, ))
+
+DATABASES = {
+    'default': MYSQL_CONF[env]
 }
 
 # Password validation

@@ -1,6 +1,5 @@
 from django.contrib import admin
-from wechat.models import Auth, Person
+from wechat.models import Subscribe
 
 # Register your models here.
-admin.site.register(Auth)
-admin.site.register(Person)
+admin.site.register(Subscribe)
