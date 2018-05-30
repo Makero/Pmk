@@ -1,10 +1,10 @@
 import json
 from django.http import HttpResponse
 from utils.api import wechat
-from utils.redis import redis
+from utils.msg import handle
 
 
-def index(req):
+def validate_token(req):
     result = {'code': 404, 'data': {}}
 
     if req.method == 'GET' and req.GET:
@@ -27,40 +27,15 @@ def index(req):
 #     return HttpResponse(result)
 
 
-def handle(req):
-    print(req.GET)
-    if req.GET['MsgType[0]'] == 'voice':
-        content = req.GET['Recognition[0]']
+def msg_handle(req):
+    if req.method == 'POST':
+        data = handle.MsgHandle(req.GET).start()
     else:
-        content = "成功啦！哈哈哈～😄"
-
-    msg = wechat.Message(req.GET)
-    """
-    msg.reply_news({
-        'ArticleCount': 2,
-        'Articles': {
-            'item':[
-                {
-                    'Title': '测试图文1',
-                    'Description': '测试描述',
-                    'PicUrl': 'https://mmbiz.qpic.cn/mmbiz_jpg/y1nlcyGpibk2qga7aTnYp2Ficdo6L174XdHGDFLevRseWibJ32eHdFIc3F85sIYib4J9JicjYnqqdZxTCWOeW4FZGdg/0?wx_fmt=jpeg',
-                    'Url': 'https://mp.weixin.qq.com/wiki?t=resource/res_main&id=mp1444738726'
-                },
-                {
-                    'Title': '测试图文2',
-                    'Description': '测试描述2',
-                    'PicUrl': 'https://mmbiz.qpic.cn/mmbiz_jpg/y1nlcyGpibk2qga7aTnYp2Ficdo6L174XdHGDFLevRseWibJ32eHdFIc3F85sIYib4J9JicjYnqqdZxTCWOeW4FZGdg/0?wx_fmt=jpeg',
-                    'Url': 'https://mp.weixin.qq.com/wiki?t=resource/res_main&id=mp1444738726'
-                }
-            ],
+        data = {
+            'code': 40001,
+            'errmsg': "不能使用get请求访问"
         }
-    })
-    """
-    msg.reply_text(content)
-    data = {
-        'code': 200,
-        'data': msg.data
-    }
+
     return HttpResponse(json.dumps(data))
 
 
