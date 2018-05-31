@@ -18,7 +18,7 @@ from mk.db_conf import DB, ENV
 print("\033[1;36m 当前在\033[0m\033[1;31m %s \033[0m\033[1;36m环境中\033[0m" %(ENV, ))
 
 # 启动定时刷新access_token
-access_token.TimedRefresh().start()
+#access_token.TimedRefresh().start()
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))

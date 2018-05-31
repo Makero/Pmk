@@ -6,11 +6,12 @@ from wechat import models
 
 class MsgHandle:
     def __init__(self, dicts):
+        print(dicts)
         self.reqData = dicts
         self.msg = event.MsgEvent(dicts)
 
-        self.msgType= dicts['MsgType[0]']
-        self.eventType = dicts['Event[0]']
+        self.msgType = dicts['MsgType[0]']
+        self.eventType = None
         self.userName = dicts['FromUserName[0]']
         self.createDate = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(int(dicts['CreateTime[0]'])))
 
@@ -31,13 +32,16 @@ class MsgHandle:
             s_filter.update(status='U')
             operation.create(subscriber_id=s_filter[0].id, date=self.createDate, status='U')
 
+    def __voice(self):
+        return self.reqData['Recognition[0]']
+
     def start(self):
         """消息处理"""
-        msgType = self.msgType
-        if msgType == 'event':
+        if self.msgType == 'event':
+            self.eventType = self.reqData['Event[0]']
             self.__subscribe()
-        if msgType == 'voice':
-            content = self.msg.data['Recognition']
+        if self.msgType == 'voice':
+            content = self.__voice()
         else:
             content = "成功啦！哈哈哈～😄"
 
