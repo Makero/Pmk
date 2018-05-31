@@ -1,14 +1,17 @@
 import redis
-from utils.redis import redis_conf as rc
+from mk.db_conf import DB, ENV
 
 
 class Redis:
 
     def __init__(self):
-        self.host = rc.params[rc.flag]['host']
-        self.password = rc.params[rc.flag]['password']
-        self.port = rc.params[rc.flag]['port']
-        self.db = rc.params[rc.flag]['db']
+
+        db_conf = DB[ENV]['redis']
+
+        self.host = db_conf['host']
+        self.password = db_conf['password']
+        self.port = db_conf['port']
+        self.db = db_conf['db']
         self.rs = self.connect_redis()
 
     def connect_redis(self):

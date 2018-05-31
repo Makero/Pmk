@@ -12,9 +12,13 @@ https://docs.djangoproject.com/en/1.11/ref/settings/
 
 import os
 
-# 启动定时刷新access_token
 from utils.access_token import access_token
-#access_token.TimedRefresh().start()
+from mk.db_conf import DB, ENV
+
+print("\033[1;36m 当前在\033[0m\033[1;31m %s \033[0m\033[1;36m环境中\033[0m" %(ENV, ))
+
+# 启动定时刷新access_token
+access_token.TimedRefresh().start()
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -87,40 +91,8 @@ DATABASES = {
 }
 """
 
-MYSQL_CONF = {
-    'family': {
-        'ENGINE': 'django.db.backends.mysql',
-        'HOST': '192.168.0.200',
-        'NAME': 'mkdb',
-        'USER': 'root',
-        'PASSWORD': 'maker',
-        'PORT': '3306',
-    },
-    'aliyun': {
-        'ENGINE': 'django.db.backends.mysql',
-        'HOST': '47.93.198.225',
-        'NAME': 'mkdb',
-        'USER': 'root',
-        'PASSWORD': 'Maker123',
-        'PORT': '3306',
-    },
-    'localhost': {
-        'ENGINE': 'django.db.backends.mysql',
-        'HOST': 'localhost',
-        'NAME': 'mkdb',
-        'USER': 'root',
-        'PASSWORD': 'maker',
-        'PORT': '3306',
-    }
-}
-try:
-    env = os.environ['ENV']
-except KeyError:
-    env = 'localhost'
-print("\033[1;33m 当前项目连接 %s 的mysql \033[0m" %(env, ))
-
 DATABASES = {
-    'default': MYSQL_CONF[env]
+    'default': DB[ENV]['mysql']
 }
 
 # Password validation
