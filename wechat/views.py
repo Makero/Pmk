@@ -1,4 +1,5 @@
 import json
+from wechat import models
 from django.http import HttpResponse
 from utils.api import wechat
 from utils.msg import handle

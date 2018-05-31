@@ -1,5 +1,7 @@
+import time
 from utils.msg import event
 from utils.redis import redis
+from wechat import models
 
 
 class MsgHandle:
@@ -7,24 +9,33 @@ class MsgHandle:
         self.reqData = dicts
         self.msg = event.MsgEvent(dicts)
 
-    def type(self):
-        """数据类型"""
-        return self.reqData['MsgType[0]']
+        self.msgType= dicts['MsgType[0]']
+        self.eventType = dicts['Event[0]']
+        self.userName = dicts['FromUserName[0]']
+        self.createDate = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(int(dicts['CreateTime[0]'])))
 
-    def subscribe(self):
+    def __subscribe(self):
         """订阅"""
-        event = self.reqData['Event[0]']
-        userName = self.reqData['FromUserName[0]']
-        if event == 'subscribe':
-            print("用户 %s 关注成功"%(userName, ))
-        elif event == 'unsubscribe':
-            print("用户 %s 取消了关注"%(userName, ))
+        subscriber = models.Subscriber.objects
+        operation = models.Operation.objects
+        s_filter = subscriber.filter(openid=self.userName)
+
+        if self.eventType == 'subscribe':
+            if s_filter:
+                s_filter.update(status='S')
+                operation.create(subscriber_id=s_filter[0].id, date=self.createDate, status='S')
+            else:
+                user = subscriber.create(openid=self.userName, status='S')
+                operation.create(subscriber_id=user.id, date=self.createDate, status='S')
+        elif self.eventType == 'unsubscribe':
+            s_filter.update(status='U')
+            operation.create(subscriber_id=s_filter[0].id, date=self.createDate, status='U')
 
     def start(self):
-        print(self.reqData)
-        msgType = self.type()
+        """消息处理"""
+        msgType = self.msgType
         if msgType == 'event':
-            self.subscribe()
+            self.__subscribe()
         if msgType == 'voice':
             content = self.msg.data['Recognition']
         else:

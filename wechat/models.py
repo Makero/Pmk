@@ -1,8 +1,16 @@
 from django.db import models
 
 
-class Subscribe(models.Model):
+class Subscriber(models.Model):
+    STATUS_TYPE = (
+        ('S', 'Subscribe'),
+        ('U', 'Unsubscribe')
+    )
     openid = models.CharField(max_length=30)
-    create_date = models.DateField()
-    cancel_date = models.DateField()
-    status = models.CharField(max_length=10)
+    status = models.CharField(max_length=1, choices=STATUS_TYPE)
+
+class Operation(models.Model):
+    subscriber = models.ForeignKey(Subscriber, on_delete=models.CASCADE)
+    date = models.DateTimeField(null=True)
+    status = models.CharField(max_length=1, choices=Subscriber.STATUS_TYPE)
+
