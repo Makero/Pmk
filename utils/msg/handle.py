@@ -16,7 +16,7 @@ class MsgHandle:
         self.createDate = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(int(dicts['CreateTime[0]'])))
 
     def __subscribe(self):
-        """订阅"""
+        """订阅与退阅事件处理"""
         subscriber = models.Subscriber.objects
         operation = models.Operation.objects
         s_filter = subscriber.filter(openid=self.userName)
@@ -28,22 +28,52 @@ class MsgHandle:
             else:
                 user = subscriber.create(openid=self.userName, status='S')
                 operation.create(subscriber_id=user.id, date=self.createDate, status='S')
+
         elif self.eventType == 'unsubscribe':
             s_filter.update(status='U')
             operation.create(subscriber_id=s_filter[0].id, date=self.createDate, status='U')
 
+    def __text(self):
+        """文本消息处理"""
+        pass
+
     def __voice(self):
+        """语音消息处理"""
         return self.reqData['Recognition[0]']
 
+    def __image(self):
+        """图片消息处理"""
+        pass
+
+    def __location(self):
+        """地理位置消息处理"""
+        pass
+
+    def __link(self):
+        """链接消息处理"""
+        pass
+
+    def __file(self):
+        """文件消息处理"""
+        pass
+
     def start(self):
-        """消息处理"""
+        """消息处理开始"""
         if self.msgType == 'event':
             self.eventType = self.reqData['Event[0]']
             self.__subscribe()
-        if self.msgType == 'voice':
-            content = self.__voice()
+        elif self.msgType == 'text':
+            self.__text()
+        elif self.msgType == 'voice':
+            self.__voice()
+        elif self.msgType == 'image':
+            self.__image()
+        elif self.msgType == 'location':
+            self.__location()
+        elif self.msgType == 'file':
+            self.__file()
         else:
-            content = "成功啦！哈哈哈～😄"
+            content = "这是什么，😄哈哈哈～"
 
         """
         msg.reply_news({
@@ -66,7 +96,7 @@ class MsgHandle:
             }
         })
         """
-        self.msg.reply_text(content)
+        self.msg.reply_image("6561940048443612952")
 
         return {
             'code': 200,
