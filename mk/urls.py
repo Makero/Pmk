@@ -22,6 +22,7 @@ urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^api/validate_token', views.validate_token),
     url(r'^api/msg_handle', views.msg_handle),
+    url(r'api/music', views.music),
 ]
 
 handler404 = views.page_not_found

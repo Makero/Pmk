@@ -1,12 +1,61 @@
 import time
 from utils.msg import event
-from utils.redis import redis
 from wechat import models
+from utils.AI import chat
+from utils.request import request as req
+
+
+class Search:
+    def __init__(self, name=None):
+        self.name = name
+        self.api_url = 'http://tingapi.ting.baidu.com/v1/restserver/ting'
+
+    def music_list(self, msg):
+
+        result = req.get_api({
+            'url': self.api_url,
+            'data': {
+                'method': 'baidu.ting.search.catalogSug',
+                'query': self.name
+            }
+        })
+        try:
+            err = result['errno']
+        except KeyError:
+            err = False
+
+        if err:
+            msg.reply_text('我这里没有这首歌哦～')
+        else:
+            msg.reply_news({
+                'ArticleCount': 1,
+                'Articles': {
+                    'item': [
+                        {
+                            'Title': result['song'][0]['songname'],
+                            'Description': '点我进入音乐播放界面',
+                            'PicUrl': 'https://mmbiz.qpic.cn/mmbiz_jpg/y1nlcyGpibk2qga7aTnYp2Ficdo6L174XdHGDFLevRseWibJ32eHdFIc3F85sIYib4J9JicjYnqqdZxTCWOeW4FZGdg/0?wx_fmt=jpeg',
+                            'Url': 'http://www.20mk.cn/music?songid='+result['song'][0]['songid']
+                        }
+                    ],
+                }
+            })
+
+    def music_play(self, song_id):
+
+        result = req.get_api({
+            'url': self.api_url,
+            'data': {
+                'method': 'baidu.ting.song.play',
+                'songid': song_id
+            }
+        })
+        return result
 
 
 class MsgHandle:
     def __init__(self, dicts):
-        print(dicts)
+        self.robot = chat.ChatRobot()
         self.reqData = dicts
         self.msg = event.MsgEvent(dicts)
 
@@ -35,11 +84,15 @@ class MsgHandle:
 
     def __text(self):
         """文本消息处理"""
-        pass
+        result = self.robot.inter_locution(self.reqData['Content[0]'])
+        # Search(music_name).music_list(self.msg)
+        self.msg.reply_text(result['data']['text'])
+
 
     def __voice(self):
         """语音消息处理"""
-        return self.reqData['Recognition[0]']
+        result = self.robot.inter_locution(self.reqData['Recognition[0]'])
+        self.msg.reply_text(result['data']['text'])
 
     def __image(self):
         """图片消息处理"""
@@ -96,7 +149,6 @@ class MsgHandle:
             }
         })
         """
-        self.msg.reply_image("6561940048443612952")
 
         return {
             'code': 200,

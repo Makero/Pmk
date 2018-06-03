@@ -1,5 +1,6 @@
 import time
 
+
 class MsgEvent:
     def __init__(self, dicts):
         self.data = {

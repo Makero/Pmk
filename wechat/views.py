@@ -1,5 +1,4 @@
 import json
-from wechat import models
 from django.http import HttpResponse
 from utils.api import wechat
 from utils.msg import handle
@@ -22,12 +21,6 @@ def validate_token(req):
     return HttpResponse(json.dumps(result))
 
 
-# def access(req):
-#     rs = redis.Redis()
-#     result = rs.get_redis(name="wechat", key="access_token")
-#     return HttpResponse(result)
-
-
 def msg_handle(req):
     if req.method == 'POST':
         data = handle.MsgHandle(req.GET).start()
@@ -44,3 +37,11 @@ def page_not_found(req):
 
     data = {'code': 404, 'data': {}}
     return HttpResponse(json.dumps(data))
+
+
+def music(req):
+    result = {'code': 404, 'data': {}}
+    if req.method == 'GET' and req.GET:
+        result['code'] = 200
+        result['data'] = handle.Search().music_play(req.GET.get('songid'))
+    return HttpResponse(json.dumps(result))

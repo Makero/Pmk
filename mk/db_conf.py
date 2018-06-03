@@ -1,4 +1,4 @@
-ENV = 'localhost'
+ENV = 'aliyun'
 
 DB = {
 
