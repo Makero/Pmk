@@ -3,6 +3,7 @@ from utils.msg import event
 from wechat import models
 from utils.AI import chat
 from utils.request import request as req
+from utils.redis import redis
 
 
 class Search:
@@ -19,6 +20,7 @@ class Search:
                 'query': self.name
             }
         })
+        print(result)
         try:
             err = result['errno']
         except KeyError:
@@ -82,17 +84,36 @@ class MsgHandle:
             s_filter.update(status='U')
             operation.create(subscriber_id=s_filter[0].id, date=self.createDate, status='U')
 
+    def __match(self, content):
+        rs = redis.Redis()
+        if content == "1001" or content == "一千零一":
+            rs.set_redis(name='message', key=self.userName, value='music')
+            self.msg.reply_text("音乐查询功能已启动，你可以输入歌曲或歌手名")
+        elif content == "1002" or content == "一千零二":
+            rs.set_redis(name='message', key=self.userName, value='text')
+            self.msg.reply_text("音乐查询功能已关闭")
+        else:
+            val = rs.get_redis(name='message', key=self.userName)
+            if val == None:
+                mess_type = 'text'
+            else:
+                mess_type = val.decode(encoding='UTF-8')
+            if mess_type == 'music':
+                Search(content).music_list(self.msg)
+            else:
+                result = self.robot.inter_locution(content)
+                self.msg.reply_text(result['data']['text'].replace('/n','\n'))
+
     def __text(self):
         """文本消息处理"""
-        result = self.robot.inter_locution(self.reqData['Content[0]'])
-        # Search(music_name).music_list(self.msg)
-        self.msg.reply_text(result['data']['text'])
-
+        content = self.reqData['Content[0]']
+        self.__match(content)
 
     def __voice(self):
         """语音消息处理"""
-        result = self.robot.inter_locution(self.reqData['Recognition[0]'])
-        self.msg.reply_text(result['data']['text'])
+        recognition = self.reqData['Recognition[0]']
+        content = recognition[0:len(recognition)-1]
+        self.__match(content)
 
     def __image(self):
         """图片消息处理"""

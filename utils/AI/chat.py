@@ -30,4 +30,5 @@ class ChatRobot:
                 'question': ask,
             }
         })
+        result['data']['text'] = result['data']['text'].replace('<p>', '').replace('</p>', '')
         return result
