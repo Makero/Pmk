@@ -54,6 +54,17 @@ class Search:
         })
         return result
 
+    def music_lrc(self, song_id):
+
+        result = req.get_api({
+            'url': self.api_url,
+            'data': {
+                'method': 'baidu.ting.song.lry',
+                'songid': song_id
+            }
+        })
+        return result
+
 
 class MsgHandle:
     def __init__(self, dicts):

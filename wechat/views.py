@@ -45,3 +45,11 @@ def music(req):
         result['code'] = 200
         result['data'] = handle.Search().music_play(req.GET.get('songid'))
     return HttpResponse(json.dumps(result))
+
+
+def music_lrc(req):
+    result = {'code': 404, 'data': {}}
+    if req.method == 'GET' and req.GET:
+        result['code'] = 200
+        result['data'] = handle.Search().music_lrc(req.GET.get('songid'))
+    return HttpResponse(json.dumps(result))
