@@ -20,7 +20,6 @@ class Search:
                 'query': self.name
             }
         })
-        print(result)
         try:
             err = result['errno']
         except KeyError:
