@@ -15,15 +15,17 @@ Including another URLconf
 """
 from django.conf.urls import url, handler404
 from django.contrib import admin
-from wechat import views
+from wechat import views as wx
+from blog import views as bg
 
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
-    url(r'^api/validate_token', views.validate_token),
-    url(r'^api/msg_handle', views.msg_handle),
-    url(r'^api/music$', views.music),
-    url(r'^api/music_lrc$', views.music_lrc),
+    url(r'^api/validate_token', wx.validate_token),
+    url(r'^api/msg_handle', wx.msg_handle),
+    url(r'^api/music', wx.music),
+
+    url(r'^api/blog/info', bg.info),
 ]
 
-handler404 = views.page_not_found
+handler404 = wx.page_not_found
