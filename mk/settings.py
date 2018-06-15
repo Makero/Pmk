@@ -46,7 +46,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'wechat.apps.AppUsersConfig',
-    ''
+    'blog.apps.BlogConfig',
 ]
 
 MIDDLEWARE = [
