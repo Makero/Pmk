@@ -5,6 +5,7 @@ from wechat import models
 from utils.AI import chat
 from utils.request import request as req
 from utils.redis import redis
+from wechat import prompt_conf as pr
 
 
 class Search:
@@ -28,7 +29,7 @@ class Search:
             err = False
 
         if err:
-            msg.reply_text('我这里没有这首歌哦～')
+            msg.reply_text(pr.MUSIC_NONE)
         else:
             ids = []
             for song in result['song']:
@@ -93,9 +94,11 @@ class MsgHandle:
             if s_filter:
                 s_filter.update(status='S')
                 operation.create(subscriber_id=s_filter[0].id, date=self.createDate, status='S')
+                self.msg.reply_text(pr.WELCOME_AGAIN)
             else:
                 user = subscriber.create(openid=self.userName, status='S')
                 operation.create(subscriber_id=user.id, date=self.createDate, status='S')
+                self.msg.reply_text(pr.WELCOME_FIRST)
 
         elif self.eventType == 'unsubscribe':
             s_filter.update(status='U')
@@ -103,15 +106,17 @@ class MsgHandle:
 
     def __match(self, content):
         rs = redis.Redis()
-        if content == "1001" or content == "一千零一":
+        if content == "1000":
+            self.msg.reply_news(pr.INSTRUCTIONS)
+        elif content == "1001" or content == "一千零一":
             rs.set_redis(name='message', key=self.userName, value='music')
-            self.msg.reply_text("音乐查询功能已启动，你可以输入歌曲或歌手名")
+            self.msg.reply_text(pr.MUSIC_FUNC_START)
         elif content == "1002" or content == "一千零二":
             rs.set_redis(name='message', key=self.userName, value='text')
-            self.msg.reply_text("音乐查询功能已关闭")
+            self.msg.reply_text(pr.MUSIC_FUNC_STOP)
         else:
             val = rs.get_redis(name='message', key=self.userName)
-            if val == None:
+            if val is None:
                 mess_type = 'text'
             else:
                 mess_type = val.decode(encoding='UTF-8')
@@ -119,7 +124,7 @@ class MsgHandle:
                 Search(content).music_list(self.msg)
             else:
                 result = self.robot.inter_locution(content)
-                self.msg.reply_text(result['data']['text'].replace('/n','\n'))
+                self.msg.reply_text(result['data']['text'].replace('/n', '\n'))
 
     def __text(self):
         """文本消息处理"""

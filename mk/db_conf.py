@@ -1,4 +1,4 @@
-ENV = 'aliyun'
+ENV = 'localhost'
 
 DB = {
 
@@ -6,7 +6,7 @@ DB = {
         'mysql': {
             'ENGINE': 'django.db.backends.mysql',
             'HOST': '192.168.0.200',
-            'NAME': 'mkdb',
+            'NAME': 'mk_wechat_db',
             'USER': 'root',
             'PASSWORD': 'maker',
             'PORT': '3306',
@@ -23,7 +23,7 @@ DB = {
         'mysql': {
             'ENGINE': 'django.db.backends.mysql',
             'HOST': 'localhost',
-            'NAME': 'mkdb',
+            'NAME': 'mk_wechat_db',
             'USER': 'root',
             'PASSWORD': 'maker',
             'PORT': '3306',
@@ -40,7 +40,7 @@ DB = {
         'mysql': {
             'ENGINE': 'django.db.backends.mysql',
             'HOST': '47.93.198.225',
-            'NAME': 'mkdb',
+            'NAME': 'mk_wechat_db',
             'USER': 'root',
             'PASSWORD': 'Maker123',
             'PORT': '3306',

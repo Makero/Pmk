@@ -11,14 +11,13 @@ https://docs.djangoproject.com/en/1.11/ref/settings/
 """
 
 import os
-
 from utils.access_token import access_token
 from mk.db_conf import DB, ENV
 
 print("\033[1;36m 当前在\033[0m\033[1;31m %s \033[0m\033[1;36m环境中\033[0m" %(ENV, ))
 
 # 启动定时刷新access_token
-#access_token.TimedRefresh().start()
+access_token.TimedRefresh().start()
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -92,9 +91,25 @@ DATABASES = {
 }
 """
 
-DATABASES = {
-    'default': DB[ENV]['mysql']
+DATABASE_APPS_MAPPING = {
+    # 'app_name':'db_name'
+    'wechat': 'wechatDB',
+    'blog': 'blogDB',
 }
+
+wechatDB = DB[ENV]['mysql']
+blogDB = wechatDB.copy()
+blogDB['NAME'] = 'mk_blog_db'
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': os.path.join(BASE_DIR, 'auth.sqlite3'),
+    },
+    'wechatDB': wechatDB,
+    'blogDB': blogDB,
+}
+DATABASE_ROUTERS = ['mk.db_router.DatabaseAppsRouter']
 
 # Password validation
 # https://docs.djangoproject.com/en/1.11/ref/settings/#auth-password-validators

@@ -2,6 +2,7 @@ import json
 from django.http import HttpResponse
 from utils.api import wechat
 from utils.msg import handle
+from utils.AI import chat
 
 
 def validate_token(req):
@@ -24,6 +25,19 @@ def validate_token(req):
 def msg_handle(req):
     if req.method == 'POST':
         data = handle.MsgHandle(req.GET).start()
+    else:
+        data = {
+            'code': 40001,
+            'errmsg': "不能使用get请求访问"
+        }
+
+    return HttpResponse(json.dumps(data))
+
+
+def msg_talk(req):
+    if req.method == 'POST':
+        robot = chat.ChatRobot()
+        data = robot.inter_locution(req.GET['talk'])
     else:
         data = {
             'code': 40001,

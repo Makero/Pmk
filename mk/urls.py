@@ -23,6 +23,7 @@ urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^api/validate_token', wx.validate_token),
     url(r'^api/msg_handle', wx.msg_handle),
+    url(r'^api/msg_talk', wx.msg_talk),
     url(r'^api/music', wx.music),
 
     url(r'^api/blog/info', bg.info),

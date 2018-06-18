@@ -6,7 +6,8 @@
 
 # API 地址
 API_URL = {
-    'access_token': 'https://api.weixin.qq.com/cgi-bin/token'
+    'access_token': 'https://api.weixin.qq.com/cgi-bin/token',
+    'jsapi_ticket': 'https://api.weixin.qq.com/cgi-bin/ticket/getticket',
 }
 
 # 接入服务器时配置的token
