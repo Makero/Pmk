@@ -24,7 +24,9 @@ urlpatterns = [
     url(r'^api/validate_token', wx.validate_token),
     url(r'^api/msg_handle', wx.msg_handle),
     url(r'^api/msg_talk', wx.msg_talk),
+    url(r'^api/qing_yun_ke', wx.qing_yun_ke),
     url(r'^api/music', wx.music),
+    url(r'^api/wx_config', wx.wx_config),
 
     url(r'^api/blog/info', bg.info),
 ]

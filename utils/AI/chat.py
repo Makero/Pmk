@@ -5,6 +5,7 @@ from utils.request import request as req
 
 
 class ChatRobot:
+    """畅游的知U智能问答机器人"""
     def __init__(self):
         self.rs = redis.Redis()
         self.access_token = None
@@ -45,4 +46,22 @@ class ChatRobot:
             }
         })
         result['data']['text'] = result['data']['text'].replace('<p>', '').replace('</p>', '')
+        return result
+
+
+class QingYunKe:
+    """青云客智能聊天机器人API url:http://api.qingyunke.com/"""
+    def __init__(self):
+        self.url = cf.QINGYUNKE_API
+
+    def inter_locution(self, talk):
+        result = req.get_api({
+            'url': self.url,
+            'data': {
+                'key': 'free',
+                'appid': 0,
+                'msg': talk,
+            }
+        })
+        result['content'] = result['content'].replace('br', '。').replace('菲菲', '晗儿')
         return result

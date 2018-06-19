@@ -1,8 +1,10 @@
 import json
 from django.http import HttpResponse
 from utils.api import wechat
+from utils.api import wechat_conf as wc
 from utils.msg import handle
 from utils.AI import chat
+from utils.redis import redis
 
 
 def validate_token(req):
@@ -34,6 +36,7 @@ def msg_handle(req):
     return HttpResponse(json.dumps(data))
 
 
+# 使用 知u 聊天机器人接口 #
 def msg_talk(req):
     if req.method == 'POST':
         robot = chat.ChatRobot()
@@ -45,6 +48,26 @@ def msg_talk(req):
         }
 
     return HttpResponse(json.dumps(data))
+
+
+# 使用 青云客 聊天机器人接口 #
+def qing_yun_ke(req):
+
+    robot = chat.QingYunKe()
+    data = robot.inter_locution(req.GET['talk'])
+
+    return HttpResponse(json.dumps(data))
+
+
+def wx_config(req):
+    result = {'code': 404, 'data': {}}
+    if req.method == 'POST':
+        rs = redis.Redis()
+        conf = rs.get_redis(name='wechat', keys=['timestamp', 'noncestr', 'signature'])
+        data = {'appid': wc.APP_ID, 'timestamp': conf[0].decode('utf-8'), 'noncestr': conf[1].decode('utf-8'), 'signature': conf[2].decode('utf-8')}
+        result['code'] = 200
+        result['data'] = data
+    return HttpResponse(json.dumps(result))
 
 
 def page_not_found(req):

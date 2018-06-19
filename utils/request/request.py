@@ -9,7 +9,10 @@ def get_api(params):
         url = params['url'] + "?" + data
     else:
         url = params['url']
-    result = requests.get(url=url, json=params['data'])
+    try:
+        result = requests.get(url=url, json=params['data'])
+    except:
+        return json.loads('{"content": "网络不可用，API调用失败啦～"}')
     return json.loads(result.text)
 
 
@@ -19,5 +22,8 @@ def post_api(params):
         url = params['url'] + "?" + data
     else:
         url = params['url']
-    result = requests.post(url=url, json=params['data'])
+    try:
+        result = requests.get(url=url, json=params['data'])
+    except:
+        return json.loads('{"content": "网络不可用，API调用失败啦～"}')
     return json.loads(result.text)
