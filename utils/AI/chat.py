@@ -5,7 +5,7 @@ from utils.request import request as req
 
 
 class ChatRobot:
-    """畅游的知U智能问答机器人"""
+    """ 畅游的知U智能问答机器人 """
     def __init__(self):
         self.rs = redis.Redis()
         self.access_token = None
@@ -50,7 +50,7 @@ class ChatRobot:
 
 
 class QingYunKe:
-    """青云客智能聊天机器人API url:http://api.qingyunke.com/"""
+    """ 青云客智能聊天机器人API url:http://api.qingyunke.com/ """
     def __init__(self):
         self.url = cf.QINGYUNKE_API
 

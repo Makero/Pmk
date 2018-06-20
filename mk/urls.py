@@ -30,6 +30,7 @@ urlpatterns = [
     url(r'^api/wx_config$', wx.wx_config),
 
     url(r'^api/blog/info$', bg.info),
+
 ]
 
 handler404 = wx.page_not_found

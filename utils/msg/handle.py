@@ -13,7 +13,6 @@ class Search:
         self.api_url = 'http://tingapi.ting.baidu.com/v1/restserver/ting'
 
     def music_list(self, msg):
-
         result = req.get_api({
             'url': self.api_url,
             'data': {
@@ -45,7 +44,6 @@ class Search:
             })
 
     def music_play(self, song_id):
-
         result = req.get_api({
             'url': self.api_url,
             'data': {
@@ -56,7 +54,6 @@ class Search:
         return result
 
     def music_lrc(self, song_id):
-
         result = req.get_api({
             'url': self.api_url,
             'data': {
