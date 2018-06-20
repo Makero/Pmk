@@ -1,5 +1,4 @@
 import time
-import json
 from utils.msg import event
 from wechat import models
 from utils.AI import chat
@@ -22,7 +21,6 @@ class Search:
                 'query': self.name
             }
         })
-        print(result)
         try:
             err = result['errno']
         except KeyError:
@@ -31,11 +29,7 @@ class Search:
         if err:
             msg.reply_text(pr.MUSIC_NONE)
         else:
-            ids = []
-            for song in result['song']:
-                dict = {song['songid']: {'songname': song['songname'], 'artistname': song['artistname']}}
-                ids.append(json.dumps(dict))
-            print(ids)
+            id = result['song'][0]['songid']
             msg.reply_news({
                 'ArticleCount': 1,
                 'Articles': {
@@ -44,7 +38,7 @@ class Search:
                             'Title': result['song'][0]['songname'],
                             'Description': '点我进入音乐播放界面',
                             'PicUrl': 'https://mmbiz.qpic.cn/mmbiz_jpg/y1nlcyGpibk2qga7aTnYp2Ficdo6L174XdHGDFLevRseWibJ32eHdFIc3F85sIYib4J9JicjYnqqdZxTCWOeW4FZGdg/0?wx_fmt=jpeg',
-                            'Url': 'http://www.20mk.cn/music?songid='+','.join(ids)
+                            'Url': 'http://www.20mk.cn/music?songid='+id
                         }
                     ],
                 }

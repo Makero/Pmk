@@ -63,5 +63,5 @@ class QingYunKe:
                 'msg': talk,
             }
         })
-        result['content'] = result['content'].replace('br', '。').replace('菲菲', '晗儿')
+        result['content'] = result['content'].replace('br', '。').replace('菲菲', '小晗晗')
         return result
