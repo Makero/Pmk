@@ -37,7 +37,7 @@ class Search:
                             'Title': result['song'][0]['songname'],
                             'Description': '点我进入音乐播放界面',
                             'PicUrl': 'https://mmbiz.qpic.cn/mmbiz_jpg/y1nlcyGpibk2qga7aTnYp2Ficdo6L174XdHGDFLevRseWibJ32eHdFIc3F85sIYib4J9JicjYnqqdZxTCWOeW4FZGdg/0?wx_fmt=jpeg',
-                            'Url': 'http://www.20mk.cn/music?songid='+id
+                            'Url': 'http://www.20mk.cn/wechat/music?songid='+id
                         }
                     ],
                 }
