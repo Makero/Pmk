@@ -60,13 +60,14 @@ def qing_yun_ke(req):
 
 
 def wx_config(req):
-    result = {'code': 404, 'data': {}}
+    result = {'code': 404, 'data': {'err':'redis的wechat不存在'}}
     if req.method == 'POST':
         rs = redis.Redis()
         conf = rs.get_redis(name='wechat', keys=['timestamp', 'noncestr', 'signature'])
-        data = {'appid': wc.APP_ID, 'timestamp': conf[0].decode('utf-8'), 'noncestr': conf[1].decode('utf-8'), 'signature': conf[2].decode('utf-8')}
-        result['code'] = 200
-        result['data'] = data
+        if conf[0] is not None:
+            data = {'appid': wc.APP_ID, 'timestamp': conf[0].decode('utf-8'), 'noncestr': conf[1].decode('utf-8'), 'signature': conf[2].decode('utf-8')}
+            result['code'] = 200
+            result['data'] = data
     return HttpResponse(json.dumps(result))
 
 
