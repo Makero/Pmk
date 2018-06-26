@@ -36,7 +36,7 @@ class TimedRefresh:
                 sec = __sec
                 rs = redis.Redis()
                 ticket = wechat.Ticket(result['access_token'])
-                params = {'noncestr': 'Wm3WZYTPz2xwyzaW', 'jsapi_ticket': ticket.get(), 'timestamp': int(time.time()), 'url': "http://www.20mk.cn/talk", }
+                params = {'noncestr': 'Wm3WZYTPz2xwyzaW', 'jsapi_ticket': ticket.get(), 'timestamp': int(time.time()), 'url': "http://www.20mk.cn/wechat/talk", }
 
                 signature = ticket.get_signature(params)
                 params.update({'access_token': result['access_token'], 'signature': signature})
