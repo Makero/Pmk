@@ -24,3 +24,32 @@ class User(models.Model):
     class Meta:
         app_label = "blog"
 
+
+class Article(models.Model):
+    ART_TYPE = (
+        ('W', 'Woman'),
+        ('M', 'Man')
+    )
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    title = models.CharField('标题', max_length=100)
+    content = models.TextField('正文')
+    create_time = models.DateTimeField('创建时间', default=timezone.now)
+    revise_time = models.DateTimeField('修改时间', null=True)
+    type = models.CharField('文章类型', max_length=1, choices=ART_TYPE)
+
+    class Meta:
+        app_label = "blog"
+
+
+class ArticleReply(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    reply_time = models.DateTimeField('回复时间', default=timezone.now)
+    content = models.TextField('回复内容')
+
+
+class ArticleComment(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    article = models.ForeignKey(Article, on_delete=models.CASCADE)
+    parent = models.ForeignKey(ArticleReply, on_delete=models.CASCADE)
+    comment_time = models.DateTimeField('评论时间', default=timezone.now)
+    content = models.TextField('评论内容')
