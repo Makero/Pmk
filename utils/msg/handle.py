@@ -73,7 +73,6 @@ class MsgHandle:
         self.msgType = dicts['MsgType[0]']
         self.eventType = None
         self.userName = dicts['FromUserName[0]']
-        self.createDate = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(int(dicts['CreateTime[0]'])))
 
     def __subscribe(self):
         """订阅与退阅事件处理"""
@@ -84,16 +83,16 @@ class MsgHandle:
         if self.eventType == 'subscribe':
             if s_filter:
                 s_filter.update(status='S')
-                operation.create(subscriber_id=s_filter[0].id, date=self.createDate, status='S')
+                operation.create(subscriber_id=s_filter[0].id, status='S')
                 self.msg.reply_text(pr.WELCOME_AGAIN)
             else:
                 user = subscriber.create(openid=self.userName, status='S')
-                operation.create(subscriber_id=user.id, date=self.createDate, status='S')
+                operation.create(subscriber_id=user.id, status='S')
                 self.msg.reply_text(pr.WELCOME_FIRST)
 
         elif self.eventType == 'unsubscribe':
             s_filter.update(status='U')
-            operation.create(subscriber_id=s_filter[0].id, date=self.createDate, status='U')
+            operation.create(subscriber_id=s_filter[0].id, status='U')
 
     def __match(self, content):
         rs = redis.Redis()
