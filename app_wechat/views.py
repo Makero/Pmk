@@ -1,4 +1,5 @@
 import json
+import time
 from django.http import HttpResponse
 from app_wechat.utils.api import wechat, wechat_conf as wc
 from app_wechat.utils.msg import handle
@@ -59,12 +60,24 @@ def qing_yun_ke(req):
 
 
 def wx_config(req):
-    result = {'code': 404, 'data': {'err':'redis的wechat不存在'}}
+
+    result = {'code': 404, 'data': {'err': 'redis的wechat不存在'}}
     if req.method == 'POST':
         rs = redis.Redis()
-        conf = rs.get_redis(name='wechat', keys=['timestamp', 'noncestr', 'signature'])
+        signame = req.GET.get('signame')
+        conf = rs.get_redis(name='wechat', keys=['jsapi_ticket', 'access_token'])
         if conf[0] is not None:
-            data = {'appid': wc.APP_ID, 'timestamp': conf[0].decode('utf-8'), 'noncestr': conf[1].decode('utf-8'), 'signature': conf[2].decode('utf-8')}
+            params = {'timestamp': int(time.time()),
+                      'noncestr': wc.NONCESTR,
+                      'jsapi_ticket': conf[0],
+                      'url': wc.JSAPI_URLS[signame]
+                      }
+            ticket = wechat.Ticket(conf[1])
+            data = {'appid': wc.APP_ID,
+                    'timestamp': params['timestamp'],
+                    'noncestr': params['noncestr'],
+                    'signature': ticket.get_signature(params)
+                    }
             result['code'] = 200
             result['data'] = data
     return HttpResponse(json.dumps(result))

@@ -37,14 +37,7 @@ class TimedRefresh:
                 sec = __sec
                 rs = redis.Redis()
                 ticket = wechat.Ticket(result['access_token'])
-                params = {'noncestr': 'Wm3WZYTPz2xwyzaW',
-                          'jsapi_ticket': ticket.get(),
-                          'timestamp': int(time.time()),
-                          'url': "http://www.20mk.cn/wechat/talk",
-                          }
-
-                signature = ticket.get_signature(params)
-                params.update({'access_token': result['access_token'], 'signature': signature})
+                params = {'access_token': result['access_token'], 'jsapi_ticket': ticket.get()}
                 rs.set_redis(name='wechat', mapping=params)
                 print("\033[1;32m 刷新获取的 access_token 写入缓存 成功\033[0m")
 
