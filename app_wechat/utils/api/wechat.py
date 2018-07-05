@@ -5,7 +5,7 @@
 ###########################
 import hashlib
 from urllib import parse
-from utils.api import wechat_conf as wx
+from app_wechat.utils.api import wechat_conf as wx
 from utils.request import request as req
 
 

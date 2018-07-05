@@ -1,10 +1,9 @@
-import time
-from utils.msg import event
-from wechat import models
+from app_wechat.utils.msg import event
+from app_wechat.utils.msg import prompt_conf as pr
+from app_wechat import models
 from utils.AI import chat
 from utils.request import request as req
 from utils.redis import redis
-from wechat import prompt_conf as pr
 
 
 class Search:

@@ -1,14 +1,14 @@
 ##############################################
 #
-# 启动一个进程无限循环定时刷新access_token
-# access_token存储到redis缓存中
+# 启动一个进程无限循环定时刷新access_token和jsapi_ticket
+# 存储到redis缓存中
 # 刷新时间为 5400s,如果异常将退出循环
 # 如果系统繁忙，将每10s再次发起请求
 #
 ##############################################
 import time
 from threading import Thread
-from utils.api import wechat
+from app_wechat.utils.api import wechat
 from utils.redis import redis
 
 
@@ -36,7 +36,11 @@ class TimedRefresh:
                 sec = __sec
                 rs = redis.Redis()
                 ticket = wechat.Ticket(result['access_token'])
-                params = {'noncestr': 'Wm3WZYTPz2xwyzaW', 'jsapi_ticket': ticket.get(), 'timestamp': int(time.time()), 'url': "http://www.20mk.cn/wechat/talk", }
+                params = {'noncestr': 'Wm3WZYTPz2xwyzaW',
+                          'jsapi_ticket': ticket.get(),
+                          'timestamp': int(time.time()),
+                          'url': "http://www.20mk.cn/wechat/talk",
+                          }
 
                 signature = ticket.get_signature(params)
                 params.update({'access_token': result['access_token'], 'signature': signature})

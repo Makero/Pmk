@@ -1,8 +1,7 @@
 import json
 from django.http import HttpResponse
-from utils.api import wechat
-from utils.api import wechat_conf as wc
-from utils.msg import handle
+from app_wechat.utils.api import wechat, wechat_conf as wc
+from app_wechat.utils.msg import handle
 from utils.AI import chat
 from utils.redis import redis
 

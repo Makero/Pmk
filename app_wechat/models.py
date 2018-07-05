@@ -1,6 +1,7 @@
 from django.db import models
 import django.utils.timezone as timezone
 
+
 class Subscriber(models.Model):
     STATUS_TYPE = (
         ('S', '订阅'),

@@ -15,8 +15,8 @@ Including another URLconf
 """
 from django.conf.urls import url, handler404
 from django.contrib import admin
-from wechat import views as wx
-from blog import views as bg
+from app_wechat import views as wx
+from app_blog import views as bg
 
 
 urlpatterns = [
