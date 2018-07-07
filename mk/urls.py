@@ -28,6 +28,7 @@ urlpatterns = [
     url(r'^api/music$', wx.music),
     url(r'^api/music_lrc$', wx.music_lrc),
     url(r'^api/wx_config$', wx.wx_config),
+    url(r'^api/wechat/auth', wx.user_auth),
 
     url(r'^api/blog/info$', bg.info),
 

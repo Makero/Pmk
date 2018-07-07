@@ -1,5 +1,6 @@
 from app_wechat.utils.msg import event
 from app_wechat.utils.msg import prompt_conf as pr
+from app_wechat.utils.auth import auth
 from app_wechat import models
 from utils.AI import chat
 from utils.request import request as req
@@ -26,6 +27,7 @@ class Search:
 
         if err:
             msg.reply_text(pr.MUSIC_NONE)
+
         else:
             id = result['song'][0]['songid']
             msg.reply_news({
@@ -80,10 +82,12 @@ class MsgHandle:
         s_filter = subscriber.filter(openid=self.userName)
 
         if self.eventType == 'subscribe':
+
             if s_filter:
                 s_filter.update(status='S')
                 operation.create(subscriber_id=s_filter[0].id, status='S')
                 self.msg.reply_text(pr.WELCOME_AGAIN)
+
             else:
                 user = subscriber.create(openid=self.userName, status='S')
                 operation.create(subscriber_id=user.id, status='S')
@@ -95,22 +99,33 @@ class MsgHandle:
 
     def __match(self, content):
         rs = redis.Redis()
+
         if content == "1000":
             self.msg.reply_news(pr.INSTRUCTIONS)
+
         elif content == "1001" or content == "一千零一":
             rs.set_redis(name='message', key=self.userName, value='music')
             self.msg.reply_text(pr.MUSIC_FUNC_START)
+
         elif content == "1002" or content == "一千零二":
             rs.set_redis(name='message', key=self.userName, value='text')
             self.msg.reply_text(pr.MUSIC_FUNC_STOP)
+
+        elif content.replace(' ', '').lower() == 'authkey':
+            authkey = auth.AuthKey(self.userName).query_or_create()
+            self.msg.reply_text(authkey)
+
         else:
             val = rs.get_redis(name='message', key=self.userName)
             if val is None:
                 mess_type = 'text'
+
             else:
                 mess_type = val.decode(encoding='UTF-8')
+
             if mess_type == 'music':
                 Search(content).music_list(self.msg)
+
             else:
                 result = self.robot.inter_locution(content)
                 self.msg.reply_text(result['data']['text'].replace('/n', '\n'))

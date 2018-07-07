@@ -5,6 +5,7 @@ from app_wechat.utils.api import wechat, wechat_conf as wc
 from app_wechat.utils.msg import handle
 from utils.AI import chat
 from utils.redis import redis
+from app_wechat.utils.auth import auth
 
 
 def validate_token(req):
@@ -20,6 +21,18 @@ def validate_token(req):
     if req.method == 'POST' and req.GET:
         result['code'] = 200
         result['method'] = 'post'
+
+    return HttpResponse(json.dumps(result))
+
+
+def user_auth(req):
+    result = {'code': 404, 'data': {}}
+    if req.method == 'POST':
+        ak = auth.AuthKey()
+        authkey = ak.is_auth_success(req.GET.get('authKey'))
+        if authkey:
+            result['data']['openid'] = authkey
+            result['code'] = '200'
 
     return HttpResponse(json.dumps(result))
 
