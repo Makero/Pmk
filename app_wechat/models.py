@@ -11,7 +11,7 @@ class Subscriber(models.Model):
     status = models.CharField('状态', max_length=1, choices=STATUS_TYPE)
 
     class Meta:
-        app_label = "wechat"
+        app_label = "app_wechat"
 
 
 class Operation(models.Model):
@@ -20,4 +20,4 @@ class Operation(models.Model):
     status = models.CharField('状态', max_length=1, choices=Subscriber.STATUS_TYPE)
 
     class Meta:
-        app_label = "wechat"
+        app_label = "app_wechat"

@@ -91,11 +91,6 @@ DATABASES = {
 }
 """
 
-DATABASE_APPS_MAPPING = {
-    # 'app_name':'db_name'
-    'wechat': 'wechatDB',
-    'blog': 'blogDB',
-}
 
 wechatDB = DB[ENV]['mysql']
 blogDB = wechatDB.copy()
@@ -109,7 +104,15 @@ DATABASES = {
     'wechatDB': wechatDB,
     'blogDB': blogDB,
 }
+
+DATABASE_APPS_MAPPING = {
+    # 'app_name':'db_name'
+    'app_wechat': 'wechatDB',
+    'app_blog': 'blogDB',
+}
+
 DATABASE_ROUTERS = ['mk.db_router.DatabaseAppsRouter']
+
 
 # Password validation
 # https://docs.djangoproject.com/en/1.11/ref/settings/#auth-password-validators
