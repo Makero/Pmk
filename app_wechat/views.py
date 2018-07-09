@@ -3,6 +3,7 @@ import time
 from django.http import HttpResponse
 from app_wechat.utils.api import wechat, wechat_conf as wc
 from app_wechat.utils.msg import handle
+from utils import basics
 from utils.AI import chat
 from utils.redis import redis
 from app_wechat.utils.auth import auth
@@ -29,10 +30,29 @@ def user_auth(req):
     result = {'code': 404, 'data': {}}
     if req.method == 'POST':
         ak = auth.AuthKey()
-        authkey = ak.is_auth_success(req.GET.get('authKey'))
-        if authkey:
-            result['data']['openid'] = authkey
+        voucher = ak.is_auth_success(req.GET.get('authKey'))
+        if voucher:
+            result['data'] = voucher
             result['code'] = '200'
+
+    return HttpResponse(json.dumps(result))
+
+
+# 登录 身份校验生成authToken
+def login_identity_check(req):
+    result = {'code': 404, 'data': {}}
+    if req.method == 'POST':
+        openid = req.GET.get('openID')
+        secret_key = req.GET.get('secretKey')
+        rs = redis.Redis(db=1)
+        secret = rs.get_redis(name='qrAuthUsers', key=openid)
+        if type(secret) is bytes:
+            secret = str(secret, encoding='utf-8')
+        if secret == secret_key:
+            auth_token = basics.create_token(openid)
+            rs.set_redis(name='authToken', key=auth_token, value=openid)
+            result['data']['authToken'] = auth_token
+            result['code'] = 200
 
     return HttpResponse(json.dumps(result))
 

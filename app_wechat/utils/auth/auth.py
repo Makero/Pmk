@@ -18,6 +18,7 @@ class AuthKey:
         self.redis = redis.Redis(db=1)
         self.usersTable = 'authUsers'
         self.keysTable = 'authKeys'
+        self.qrAuthUserTable = 'qrAuthUsers'
 
     def query_authkey(self):
         """ 查询authkey """
@@ -48,10 +49,15 @@ class AuthKey:
     def is_auth_success(self, authkey):
         """ 判断认证是否成功  认证成功返回 openid 值   认证失败返回 False """
         openid = self.redis.get_redis(name=self.keysTable, key=authkey)
+        data = None
         if openid:
             self.redis.del_redis(name=self.keysTable, key=authkey)
             self.redis.del_redis(name=self.usersTable, key=openid)
-        if type(openid) is bytes:
-            openid = str(openid, encoding='utf-8')
-        return openid or False
+            secret_key = basics.create_random_string(128)
+            self.redis.set_redis(name=self.qrAuthUserTable, key=openid, value=secret_key)
+            if type(openid) is bytes:
+                openid = str(openid, encoding='utf-8')
+            data = {'openID': openid, 'secretKey': secret_key}
+
+        return data or False
 
