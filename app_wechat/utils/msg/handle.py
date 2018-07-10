@@ -121,7 +121,7 @@ class MsgHandle:
                 mess_type = 'text'
 
             else:
-                mess_type = val.decode(encoding='UTF-8')
+                mess_type = val
 
             if mess_type == 'music':
                 Search(content).music_list(self.msg)

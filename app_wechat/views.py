@@ -46,11 +46,10 @@ def login_identity_check(req):
         secret_key = req.GET.get('secretKey')
         rs = redis.Redis(db=1)
         secret = rs.get_redis(name='qrAuthUsers', key=openid)
-        if type(secret) is bytes:
-            secret = str(secret, encoding='utf-8')
+
         if secret == secret_key:
             auth_token = basics.create_token(openid)
-            rs.set_redis(name='authToken', key=auth_token, value=openid)
+            rs.set_redis(name='authToken:'+auth_token, mapping={''}, day=5)
             result['data']['authToken'] = auth_token
             result['code'] = 200
 

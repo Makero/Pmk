@@ -41,9 +41,6 @@ class AuthKey:
             if not self.authKey:
                 self.create_authkey()
 
-        if type(self.authKey) is bytes:
-            self.authKey = str(self.authKey, encoding='utf-8')
-
         return self.authKey
 
     def is_auth_success(self, authkey):
@@ -55,8 +52,7 @@ class AuthKey:
             self.redis.del_redis(name=self.usersTable, key=openid)
             secret_key = basics.create_random_string(128)
             self.redis.set_redis(name=self.qrAuthUserTable, key=openid, value=secret_key)
-            if type(openid) is bytes:
-                openid = str(openid, encoding='utf-8')
+
             data = {'openID': openid, 'secretKey': secret_key}
 
         return data or False
