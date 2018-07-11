@@ -26,6 +26,17 @@ class User(models.Model):
         app_label = "app_web"
 
 
+class Token(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    token = models.CharField(max_length=64)
+
+    class Meta:
+        app_label = "app_web"
+
+    def __str__(self):
+        return self.user
+
+
 class Article(models.Model):
     """文章"""
     ART_TYPE = (

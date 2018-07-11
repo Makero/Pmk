@@ -13,26 +13,16 @@ Including another URLconf
     1. Import the include() function: from django.conf.urls import url, include
     2. Add a URL to urlpatterns:  url(r'^blog/', include('blog.urls'))
 """
-from django.conf.urls import url, handler404
+from django.conf.urls import url, include, handler404
 from django.contrib import admin
-from app_wechat import views as wx
-from app_web import views as bg
+
 
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
-    url(r'^api/validate_token$', wx.validate_token),
-    url(r'^api/msg_handle$', wx.msg_handle),
-    url(r'^api/msg_talk$', wx.msg_talk),
-    url(r'^api/qing_yun_ke$', wx.qing_yun_ke),
-    url(r'^api/music$', wx.music),
-    url(r'^api/music_lrc$', wx.music_lrc),
-    url(r'^api/wx_config$', wx.wx_config),
-    url(r'^api/wechat/auth', wx.user_auth),
-    url(r'^api/identity_check', wx.login_identity_check),
-
-    url(r'^api/blog/info$', bg.info),
+    url(r'^api/', include('app_web.web_urls')),
+    url(r'^api/wx/', include('app_wechat.wechat_urls')),
 
 ]
 
-handler404 = wx.page_not_found
+# handler404 = wx.page_not_found

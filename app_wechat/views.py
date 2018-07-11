@@ -3,7 +3,6 @@ import time
 from django.http import HttpResponse
 from app_wechat.utils.api import wechat, wechat_conf as wc
 from app_wechat.utils.msg import handle
-from utils import basics
 from utils.AI import chat
 from utils.redis import redis
 from app_wechat.utils.auth import auth
@@ -36,24 +35,6 @@ def user_auth(req):
         if voucher:
             result['data'] = voucher
             result['code'] = '200'
-
-    return HttpResponse(json.dumps(result))
-
-
-def login_identity_check(req):
-    """ 扫码登录 身份校验生成authToken """
-    result = {'code': 404, 'data': {}}
-    if req.method == 'POST':
-        openid = req.GET.get('openID')
-        secret_key = req.GET.get('secretKey')
-        rs = redis.Redis(db=1)
-        secret = rs.get_redis(name='qrAuthUsers', key=openid)
-
-        if secret == secret_key:
-            auth_token = basics.create_token(openid)
-            rs.set_redis(name='authToken:'+auth_token, mapping={''}, day=5)
-            result['data']['authToken'] = auth_token
-            result['code'] = 200
 
     return HttpResponse(json.dumps(result))
 
