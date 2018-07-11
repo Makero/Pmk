@@ -114,9 +114,3 @@ def music_lrc(req):
         result['code'] = 200
         result['data'] = handle.Search().music_lrc(req.GET.get('songid'))
     return HttpResponse(json.dumps(result))
-
-
-def page_not_found(req):
-    """ 页面不存在 """
-    data = {'code': 404, 'data': {}}
-    return HttpResponse(json.dumps(data))

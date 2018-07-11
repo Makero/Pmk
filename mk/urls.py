@@ -13,9 +13,8 @@ Including another URLconf
     1. Import the include() function: from django.conf.urls import url, include
     2. Add a URL to urlpatterns:  url(r'^blog/', include('blog.urls'))
 """
-from django.conf.urls import url, include, handler404
+from django.conf.urls import url, include
 from django.contrib import admin
-
 
 
 urlpatterns = [
@@ -24,5 +23,3 @@ urlpatterns = [
     url(r'^api/wx/', include('app_wechat.wechat_urls')),
 
 ]
-
-# handler404 = wx.page_not_found
