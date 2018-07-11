@@ -3,6 +3,7 @@ import django.utils.timezone as timezone
 
 
 class Subscriber(models.Model):
+    """ 公众号订阅 """
     STATUS_TYPE = (
         ('S', '订阅'),
         ('U', '退订')
@@ -15,6 +16,7 @@ class Subscriber(models.Model):
 
 
 class Operation(models.Model):
+    """ 用户操作事件 """
     subscriber = models.ForeignKey(Subscriber, on_delete=models.CASCADE)
     date = models.DateTimeField('操作日期', default=timezone.now)
     status = models.CharField('状态', max_length=1, choices=Subscriber.STATUS_TYPE)

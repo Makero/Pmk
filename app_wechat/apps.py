@@ -1,5 +1,5 @@
 from django.apps import AppConfig
 
 
-class AppUsersConfig(AppConfig):
+class UsersConfig(AppConfig):
     name = 'app_wechat'

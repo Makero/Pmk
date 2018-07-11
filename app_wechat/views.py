@@ -10,6 +10,7 @@ from app_wechat.utils.auth import auth
 
 
 def validate_token(req):
+    """ 微信公众号调用平台时的token验证 """
     result = {'code': 404, 'data': {}}
 
     if req.method == 'GET' and req.GET:
@@ -27,6 +28,7 @@ def validate_token(req):
 
 
 def user_auth(req):
+    """ 微信公众号用户身份认证 """
     result = {'code': 404, 'data': {}}
     if req.method == 'POST':
         ak = auth.AuthKey()
@@ -38,8 +40,8 @@ def user_auth(req):
     return HttpResponse(json.dumps(result))
 
 
-# 登录 身份校验生成authToken
 def login_identity_check(req):
+    """ 扫码登录 身份校验生成authToken """
     result = {'code': 404, 'data': {}}
     if req.method == 'POST':
         openid = req.GET.get('openID')
@@ -57,6 +59,7 @@ def login_identity_check(req):
 
 
 def msg_handle(req):
+    """ 公众号消息处理 """
     if req.method == 'POST':
         data = handle.MsgHandle(req.GET).start()
     else:
@@ -68,8 +71,8 @@ def msg_handle(req):
     return HttpResponse(json.dumps(data))
 
 
-# 使用 知u 聊天机器人接口 #
 def msg_talk(req):
+    """ 使用 知u 聊天机器人接口 """
     if req.method == 'POST':
         robot = chat.ChatRobot()
         data = robot.inter_locution(req.GET['talk'])
@@ -82,9 +85,8 @@ def msg_talk(req):
     return HttpResponse(json.dumps(data))
 
 
-# 使用 青云客 聊天机器人接口 #
 def qing_yun_ke(req):
-
+    """ 使用 青云客 聊天机器人接口 """
     robot = chat.QingYunKe()
     data = robot.inter_locution(req.GET['talk'])
 
@@ -92,7 +94,7 @@ def qing_yun_ke(req):
 
 
 def wx_config(req):
-
+    """ 微信jssdk 权限验证配置 """
     result = {'code': 404, 'data': {'err': 'redis的wechat不存在'}}
     if req.method == 'POST':
         rs = redis.Redis()
@@ -115,13 +117,8 @@ def wx_config(req):
     return HttpResponse(json.dumps(result))
 
 
-def page_not_found(req):
-
-    data = {'code': 404, 'data': {}}
-    return HttpResponse(json.dumps(data))
-
-
 def music(req):
+    """ 音乐信息查询 """
     result = {'code': 404, 'data': {}}
     if req.method == 'GET' and req.GET:
         result['code'] = 200
@@ -130,8 +127,15 @@ def music(req):
 
 
 def music_lrc(req):
+    """ 音乐歌词查询 """
     result = {'code': 404, 'data': {}}
     if req.method == 'GET' and req.GET:
         result['code'] = 200
         result['data'] = handle.Search().music_lrc(req.GET.get('songid'))
     return HttpResponse(json.dumps(result))
+
+
+def page_not_found(req):
+    """ 页面不存在 """
+    data = {'code': 404, 'data': {}}
+    return HttpResponse(json.dumps(data))

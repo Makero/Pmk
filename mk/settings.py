@@ -44,8 +44,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'app_wechat.apps.AppUsersConfig',
-    'app_blog.apps.BlogConfig',
+    'app_wechat.apps.UsersConfig',
+    'app_web.apps.WebConfig',
 ]
 
 MIDDLEWARE = [
@@ -93,8 +93,8 @@ DATABASES = {
 
 
 wechatDB = DB[ENV]['mysql']
-blogDB = wechatDB.copy()
-blogDB['NAME'] = 'mk_blog_db'
+webDB = wechatDB.copy()
+webDB['NAME'] = 'mk_web_db'
 
 DATABASES = {
     'default': {
@@ -102,13 +102,13 @@ DATABASES = {
         'NAME': os.path.join(BASE_DIR, 'auth.sqlite3'),
     },
     'wechatDB': wechatDB,
-    'blogDB': blogDB,
+    'webDB': webDB,
 }
 
 DATABASE_APPS_MAPPING = {
     # 'app_name':'db_name'
     'app_wechat': 'wechatDB',
-    'app_blog': 'blogDB',
+    'app_web': 'webDB',
 }
 
 DATABASE_ROUTERS = ['mk.db_router.DatabaseAppsRouter']

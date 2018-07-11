@@ -44,7 +44,7 @@ class AuthKey:
         return self.authKey
 
     def is_auth_success(self, authkey):
-        """ 判断认证是否成功  认证成功返回 openid 值   认证失败返回 False """
+        """ 判断认证是否成功  认证成功返回 openid和secretKey   认证失败返回 False """
         openid = self.redis.get_redis(name=self.keysTable, key=authkey)
         data = None
         if openid:

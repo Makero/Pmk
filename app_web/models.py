@@ -23,7 +23,7 @@ class User(models.Model):
     enjoy = models.TextField('兴趣爱好', null=True)
 
     class Meta:
-        app_label = "app_blog"
+        app_label = "app_web"
 
 
 class Article(models.Model):
@@ -42,7 +42,7 @@ class Article(models.Model):
     type = models.CharField('文章分类', max_length=1, choices=ART_TYPE)
 
     class Meta:
-        app_label = "app_blog"
+        app_label = "app_web"
 
 
 class Mood(models.Model):
@@ -57,7 +57,7 @@ class Mood(models.Model):
     weather = models.CharField('天气', max_length=10)
 
     class Meta:
-        app_label = "app_blog"
+        app_label = "app_web"
 
 
 class Comment(models.Model):
@@ -74,7 +74,7 @@ class Comment(models.Model):
     content = models.TextField('评论内容')
 
     class Meta:
-        app_label = "app_blog"
+        app_label = "app_web"
 
 
 class Reply(models.Model):
@@ -94,4 +94,4 @@ class Reply(models.Model):
     content = models.TextField('回复内容')
 
     class Meta:
-        app_label = "app_blog"
+        app_label = "app_web"
