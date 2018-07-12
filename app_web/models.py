@@ -8,10 +8,9 @@ class User(models.Model):
         ('W', '女'),
         ('M', '男')
     )
-    username = models.CharField('账户', max_length=30)
-    password = models.CharField('密码', max_length=30)
-    nickname = models.CharField('昵称', max_length=30)
+    username = models.CharField('账户', max_length=12)
     sex = models.CharField('性别', max_length=1, choices=SEX_TYPE)
+    openid = models.CharField('公众号用户id', max_length=30)
     join_time = models.DateTimeField('注册时间', default=timezone.now)
     introduction = models.TextField('自我介绍', null=True)
     head_path = models.CharField('头像路径', max_length=255, null=True)
@@ -24,6 +23,9 @@ class User(models.Model):
 
     class Meta:
         app_label = "app_web"
+
+    def __str__(self):
+        return self.username
 
 
 class Token(models.Model):
