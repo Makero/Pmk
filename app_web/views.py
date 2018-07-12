@@ -12,8 +12,8 @@ class LoginView(APIView):
     authentication_classes = ()
 
     def post(self, request):
-        openid = request.GET.get('openID')
-        secret_key = request.GET.get('secretKey')
+        openid = request.data.get('openID')
+        secret_key = request.data.get('secretKey')
         rs = redis.Redis(db=1)
         secret = rs.get_redis(name='qrAuthUsers', key=openid)
 

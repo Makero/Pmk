@@ -1,11 +1,16 @@
 import json
 import time
+from rest_framework import viewsets, permissions, status
+from rest_framework.response import Response
+from rest_framework.views import APIView
+
 from django.http import HttpResponse
 from app_wechat.utils.api import wechat, wechat_conf as wc
 from app_wechat.utils.msg import handle
 from utils.AI import chat
 from utils.redis import redis
 from app_wechat.utils.auth import auth
+from app_web import models, serializers
 
 
 def validate_token(req):
@@ -26,17 +31,32 @@ def validate_token(req):
     return HttpResponse(json.dumps(result))
 
 
-def user_auth(req):
-    """ 微信公众号用户身份认证 """
-    result = {'code': 404, 'data': {}}
-    if req.method == 'POST':
-        ak = auth.AuthKey()
-        voucher = ak.is_auth_success(req.GET.get('authKey'))
-        if voucher:
-            result['data'] = voucher
-            result['code'] = '200'
+class UserAuthView(APIView):
+    """ 用户身份认证 """
+    permission_classes = ()
+    authentication_classes = ()
 
-    return HttpResponse(json.dumps(result))
+    def post(self, request):
+        ak = auth.AuthKey()
+        voucher = ak.is_auth_success(request.data.get('authKey'))
+        if voucher:
+
+            openid_filter = models.User.objects.filter(openid=voucher.get('openID'))
+
+            if openid_filter:
+                username_filter = openid_filter.filter(username=request.data.get('userName'))
+                if username_filter:
+                    username_filter.update(sex=request.data.get('sex'))
+                else:
+                    pass
+            else:
+                s = serializers.UserSerializer(data={'username': request.data.get('userName'),
+                                                     'sex': request.data.get('sex'),
+                                                     'openid': voucher.get('openID')})
+                if s.is_valid():
+                    s.save()
+                    return Response({'code': '20001', 'data': voucher}, status=status.HTTP_201_CREATED)
+        return Response({'code': '40001', 'msg': '认证失败'}, status=status.HTTP_400_BAD_REQUEST)
 
 
 def msg_handle(req):
