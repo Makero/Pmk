@@ -10,7 +10,7 @@ class User(models.Model):
     )
     username = models.CharField('账户', max_length=12)
     sex = models.CharField('性别', max_length=1, choices=SEX_TYPE)
-    openid = models.CharField('公众号用户id', max_length=30)
+    openid = models.CharField('公众号用户id', max_length=30, unique=True)
     join_time = models.DateTimeField('注册时间', default=timezone.now)
     introduction = models.TextField('自我介绍', null=True)
     head_path = models.CharField('头像路径', max_length=255, null=True)

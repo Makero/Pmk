@@ -111,7 +111,7 @@ class MsgHandle:
             rs.set_redis(name='message', key=self.userName, value='text')
             self.msg.reply_text(pr.MUSIC_FUNC_STOP)
 
-        elif content.replace(' ', '').lower() == 'authkey':
+        elif content.replace(' ', '').lower() == '@authkey':
             authkey = auth.AuthKey(self.userName).query_or_create()
             self.msg.reply_text(authkey)
 

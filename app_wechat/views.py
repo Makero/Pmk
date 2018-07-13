@@ -39,22 +39,26 @@ class UserAuthView(APIView):
     def post(self, request):
         ak = auth.AuthKey()
         voucher = ak.is_auth_success(request.data.get('authKey'))
-        if voucher:
 
+        if voucher:
+            # 认证authKey成功
             openid_filter = models.User.objects.filter(openid=voucher.get('openID'))
 
             if openid_filter:
+                print(openid_filter)
                 username_filter = openid_filter.filter(username=request.data.get('userName'))
                 if username_filter:
                     username_filter.update(sex=request.data.get('sex'))
-                else:
-                    pass
+                    ak.del_auth_msg(voucher.get('openID'), request.data.get('authKey'))
+                    return Response({'code': '20001', 'data': voucher}, status=status.HTTP_201_CREATED)
+                return Response({'code': '40002', 'msg': '昵称不正确'}, status=status.HTTP_400_BAD_REQUEST)
             else:
                 s = serializers.UserSerializer(data={'username': request.data.get('userName'),
                                                      'sex': request.data.get('sex'),
                                                      'openid': voucher.get('openID')})
                 if s.is_valid():
                     s.save()
+                    ak.del_auth_msg(voucher.get('openID'), request.data.get('authKey'))
                     return Response({'code': '20001', 'data': voucher}, status=status.HTTP_201_CREATED)
         return Response({'code': '40001', 'msg': '认证失败'}, status=status.HTTP_400_BAD_REQUEST)
 

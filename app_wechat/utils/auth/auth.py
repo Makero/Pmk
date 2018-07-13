@@ -48,12 +48,13 @@ class AuthKey:
         openid = self.redis.get_redis(name=self.keysTable, key=authkey)
         data = None
         if openid:
-            self.redis.del_redis(name=self.keysTable, key=authkey)
-            self.redis.del_redis(name=self.usersTable, key=openid)
-            secret_key = basics.create_random_string(128)
+            secret_key = basics.create_random_string(128) #随机生成签名
             self.redis.set_redis(name=self.qrAuthUserTable, key=openid, value=secret_key)
 
             data = {'openID': openid, 'secretKey': secret_key}
 
         return data or False
 
+    def del_auth_msg(self, openid, authkey):
+        self.redis.del_redis(name=self.keysTable, key=authkey)
+        self.redis.del_redis(name=self.usersTable, key=openid)
