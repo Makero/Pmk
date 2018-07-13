@@ -4,8 +4,8 @@ import time
 class MsgEvent:
     def __init__(self, dicts):
         self.data = {
-            'ToUserName': dicts['FromUserName[0]'],
-            'FromUserName': dicts['ToUserName[0]'],
+            'ToUserName': dicts['FromUserName'],
+            'FromUserName': dicts['ToUserName'],
             'CreateTime': int(time.time()),
             'MsgType': None
         }

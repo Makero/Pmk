@@ -1,34 +1,24 @@
-import json
 import time
-from rest_framework import viewsets, permissions, status
+from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
-
-from django.http import HttpResponse
 from app_wechat.utils.api import wechat, wechat_conf as wc
 from app_wechat.utils.msg import handle
+from app_wechat.utils.auth import auth
 from utils.AI import chat
 from utils.redis import redis
-from app_wechat.utils.auth import auth
 from app_web import models, serializers
 
 
-def validate_token(req):
+class ValidateTokenView(APIView):
     """ 微信公众号调用平台时的token验证 """
-    result = {'code': 404, 'data': {}}
+    permission_classes = ()
+    authentication_classes = ()
 
-    if req.method == 'GET' and req.GET:
+    def get(self, request):
         check = wechat.Validate()
-        val = check.check_signature(req.GET)
-        result['code'] = 200
-        result['method'] = 'get'
-        result['data']['bool'] = val
-
-    if req.method == 'POST' and req.GET:
-        result['code'] = 200
-        result['method'] = 'post'
-
-    return HttpResponse(json.dumps(result))
+        val = check.check_signature(request.data)
+        return Response({'code': '20001', 'data': {'bool': val}}, status=status.HTTP_201_CREATED)
 
 
 class UserAuthView(APIView):
@@ -45,7 +35,6 @@ class UserAuthView(APIView):
             openid_filter = models.User.objects.filter(openid=voucher.get('openID'))
 
             if openid_filter:
-                print(openid_filter)
                 username_filter = openid_filter.filter(username=request.data.get('userName'))
                 if username_filter:
                     username_filter.update(sex=request.data.get('sex'))
@@ -63,47 +52,47 @@ class UserAuthView(APIView):
         return Response({'code': '40001', 'msg': '认证失败'}, status=status.HTTP_400_BAD_REQUEST)
 
 
-def msg_handle(req):
+class MsgHandleView(APIView):
     """ 公众号消息处理 """
-    if req.method == 'POST':
-        data = handle.MsgHandle(req.GET).start()
-    else:
-        data = {
-            'code': 40001,
-            'errmsg': "不能使用get请求访问"
-        }
+    permission_classes = ()
+    authentication_classes = ()
 
-    return HttpResponse(json.dumps(data))
+    def post(self, request):
+        print(request.data)
+        data = handle.MsgHandle(request.data).start()
+        return Response({'code': '20001', 'data': data}, status=status.HTTP_201_CREATED)
 
 
-def msg_talk(req):
+class ZyouRobotView(APIView):
     """ 使用 知u 聊天机器人接口 """
-    if req.method == 'POST':
+    permission_classes = ()
+    authentication_classes = ()
+
+    def post(self, request):
         robot = chat.ChatRobot()
-        data = robot.inter_locution(req.GET['talk'])
-    else:
-        data = {
-            'code': 40001,
-            'errmsg': "不能使用get请求访问"
-        }
-
-    return HttpResponse(json.dumps(data))
+        result = robot.inter_locution(request.data['talk'])
+        return Response({'code': '20001', 'data': {'content': result}}, status=status.HTTP_201_CREATED)
 
 
-def qing_yun_ke(req):
+class QYKView(APIView):
     """ 使用 青云客 聊天机器人接口 """
-    robot = chat.QingYunKe()
-    data = robot.inter_locution(req.GET['talk'])
+    permission_classes = ()
+    authentication_classes = ()
 
-    return HttpResponse(json.dumps(data))
+    def post(self, request):
+        robot = chat.QingYunKe()
+        result = robot.inter_locution(request.data['talk'])
+        return Response({'code': '20001', 'data': {'content': result}}, status=status.HTTP_201_CREATED)
 
 
-def wx_config(req):
+class WxConfigView(APIView):
     """ 微信jssdk 权限验证配置 """
-    result = {'code': 404, 'data': {'err': 'redis的wechat不存在'}}
-    if req.method == 'POST':
+    permission_classes = ()
+    authentication_classes = ()
+
+    def post(self, request):
         rs = redis.Redis()
-        signame = req.GET.get('signame')
+        signame = request.data['signame']
         conf = rs.get_redis(name='wechat', keys=['jsapi_ticket', 'access_token'])
         if conf[0] is not None:
             params = {'timestamp': int(time.time()),
@@ -117,24 +106,26 @@ def wx_config(req):
                     'noncestr': params['noncestr'],
                     'signature': ticket.get_signature(params)
                     }
-            result['code'] = 200
-            result['data'] = data
-    return HttpResponse(json.dumps(result))
+            return Response({'code': '20001', 'data': data}, status=status.HTTP_201_CREATED)
+        return Response({'code': '40001', 'msg': 'redis的wechat表不存在，定时刷新access_token功能没有开启'},
+                        status=status.HTTP_400_BAD_REQUEST)
 
 
-def music(req):
+class MusicView(APIView):
     """ 音乐信息查询 """
-    result = {'code': 404, 'data': {}}
-    if req.method == 'GET' and req.GET:
-        result['code'] = 200
-        result['data'] = handle.Search().music_play(req.GET.get('songid'))
-    return HttpResponse(json.dumps(result))
+    permission_classes = ()
+    authentication_classes = ()
+
+    def get(self, request):
+        result = handle.Search().music_play(request.data['songid'])
+        return Response({'code': '20001', 'data': result}, status=status.HTTP_201_CREATED)
 
 
-def music_lrc(req):
+class MusicLRCView(APIView):
     """ 音乐歌词查询 """
-    result = {'code': 404, 'data': {}}
-    if req.method == 'GET' and req.GET:
-        result['code'] = 200
-        result['data'] = handle.Search().music_lrc(req.GET.get('songid'))
-    return HttpResponse(json.dumps(result))
+    permission_classes = ()
+    authentication_classes = ()
+
+    def get(self, request):
+        result = handle.Search().music_lrc(request.data.get('songid'))
+        return Response({'code': '20001', 'data': result}, status=status.HTTP_201_CREATED)

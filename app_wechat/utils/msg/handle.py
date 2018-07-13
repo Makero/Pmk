@@ -29,7 +29,7 @@ class Search:
             msg.reply_text(pr.MUSIC_NONE)
 
         else:
-            id = result['song'][0]['songid']
+            song_id = result['song'][0]['songid']
             msg.reply_news({
                 'ArticleCount': 1,
                 'Articles': {
@@ -37,8 +37,9 @@ class Search:
                         {
                             'Title': result['song'][0]['songname'],
                             'Description': '点我进入音乐播放界面',
-                            'PicUrl': 'https://mmbiz.qpic.cn/mmbiz_jpg/y1nlcyGpibk2qga7aTnYp2Ficdo6L174XdHGDFLevRseWibJ32eHdFIc3F85sIYib4J9JicjYnqqdZxTCWOeW4FZGdg/0?wx_fmt=jpeg',
-                            'Url': 'http://www.20mk.cn/wechat/music?songid='+id
+                            'PicUrl': 'https://mmbiz.qpic.cn/mmbiz_jpg/y1nlcyGpibk2qga7aTnYp2Ficdo6L174X'
+                                      'dHGDFLevRseWibJ32eHdFIc3F85sIYib4J9JicjYnqqdZxTCWOeW4FZGdg/0?wx_fmt=jpeg',
+                            'Url': 'http://www.20mk.cn/wechat/music?songid='+song_id
                         }
                     ],
                 }
@@ -71,9 +72,9 @@ class MsgHandle:
         self.reqData = dicts
         self.msg = event.MsgEvent(dicts)
 
-        self.msgType = dicts['MsgType[0]']
+        self.msgType = dicts['MsgType'][0]
         self.eventType = None
-        self.userName = dicts['FromUserName[0]']
+        self.userName = dicts['FromUserName'][0]
 
     def __subscribe(self):
         """订阅与退阅事件处理"""
@@ -128,16 +129,16 @@ class MsgHandle:
 
             else:
                 result = self.robot.inter_locution(content)
-                self.msg.reply_text(result['data']['text'].replace('/n', '\n'))
+                self.msg.reply_text(result.replace('/n', '\n'))
 
     def __text(self):
         """文本消息处理"""
-        content = self.reqData['Content[0]']
+        content = self.reqData['Content'][0]
         self.__match(content)
 
     def __voice(self):
         """语音消息处理"""
-        recognition = self.reqData['Recognition[0]']
+        recognition = self.reqData['Recognition'][0]
         content = recognition[0:len(recognition)-1]
         self.__match(content)
 
@@ -160,7 +161,7 @@ class MsgHandle:
     def start(self):
         """消息处理开始"""
         if self.msgType == 'event':
-            self.eventType = self.reqData['Event[0]']
+            self.eventType = self.reqData['Event'][0]
             self.__subscribe()
         elif self.msgType == 'text':
             self.__text()
@@ -197,7 +198,4 @@ class MsgHandle:
         })
         """
 
-        return {
-            'code': 200,
-            'data': self.msg.data
-        }
+        return self.msg.data

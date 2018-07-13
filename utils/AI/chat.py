@@ -35,7 +35,7 @@ class ChatRobot:
             if sec > 3600 * 24 * self.deadline:
                 self.access_token = self.__access_token()
             else:
-                self.access_token = zyou[0].decode('utf-8')
+                self.access_token = zyou[0]
         result = req.post_api({
             'url': cf.API_URL['interlocution'],
             'data': {
@@ -46,7 +46,7 @@ class ChatRobot:
             }
         })
         result['data']['text'] = result['data']['text'].replace('<p>', '').replace('</p>', '')
-        return result
+        return result['data']['text']
 
 
 class QingYunKe:
@@ -64,4 +64,4 @@ class QingYunKe:
             }
         })
         result['content'] = result['content'].replace('br', '。').replace('菲菲', '小晗晗')
-        return result
+        return result['content']
