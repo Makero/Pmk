@@ -14,34 +14,21 @@ class LoginView(APIView):
     def post(self, request):
         openid = request.data.get('openID')
         secret_key = request.data.get('secretKey')
+        if openid is None or secret_key is None:
+            return Response({'code': '40001', 'msg': '没有身份认证'}, status=status.HTTP_400_BAD_REQUEST)
+
         rs = redis.Redis(db=1)
         secret = rs.get_redis(name='qrAuthUsers', key=openid)
 
-        queryset = models.User.objects.all()
-        s = serializers.UserSerializer(queryset, many=True)
-        print(s.data)
-
         if secret == secret_key:
+            data = models.User.objects.get(openid=openid)
+
             auth_token = basics.create_token(openid)
-            rs.set_redis(name='authToken:' + auth_token, mapping={'user': 'Maker', 'age': 27, 'sex': 0}, day=5)
-            return Response({'code': '20001', 'authToken': auth_token}, status=status.HTTP_201_CREATED)
+            rs.set_redis(name='authToken:' + auth_token, mapping={'id': data.id,
+                                                                  'user': data.username,
+                                                                  'sex': data.sex,
+                                                                  'introduction': data.introduction,
+                                                                  'head_path': data.head_path}, day=5)
+            return Response({'code': '20001', 'data': {'authToken': auth_token}}, status=status.HTTP_201_CREATED)
 
         return Response({'code': '40001', 'msg': '登录失败'}, status=status.HTTP_400_BAD_REQUEST)
-
-
-class RegisterView(APIView):
-    """ 用户注册 """
-    authentication_classes = ()
-    permission_classes = ()
-
-    def post(self, request):
-        s = serializers.UserSerializer(data=request.data)
-        if s.is_valid():
-            s.save()
-            return Response(s.data, status=status.HTTP_201_CREATED)
-        return Response(s.errors, status=status.HTTP_400_BAD_REQUEST)
-
-
-class UserViewSet(viewsets.ModelViewSet):
-    queryset = models.User.objects.all()
-    serializer_class = serializers.UserSerializer
