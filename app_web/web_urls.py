@@ -4,13 +4,11 @@ from django.conf.urls import url, include
 from rest_framework.documentation import include_docs_urls
 
 router = routers.DefaultRouter()
-router.register("user", views.UserViewSet)
 
 
 urlpatterns = [
     url(r'^', include(router.urls)),
 
-    url(r'^register/', views.RegisterView.as_view()),
     url(r'^login_check', views.LoginView.as_view()),
 
     url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
