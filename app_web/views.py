@@ -32,3 +32,17 @@ class LoginView(APIView):
             return Response({'code': '20001', 'data': {'authToken': auth_token}}, status=status.HTTP_201_CREATED)
 
         return Response({'code': '40001', 'msg': '登录失败'}, status=status.HTTP_400_BAD_REQUEST)
+
+
+class CheckAuthToken(APIView):
+    """ 验证authToken是否有效 """
+    permission_classes = ()
+    authentication_classes = ()
+
+    def post(self, request):
+        auth_token = request.data.get('authToken')
+        rs = redis.Redis(db=1)
+        user_data = rs.get_redis(name='authToken:'+auth_token)
+        if len(user_data):
+            return Response({'code': '20001', 'data': user_data}, status=status.HTTP_201_CREATED)
+        return Response({'code': '40001', 'msg': 'authToken无效'}, status=status.HTTP_400_BAD_REQUEST)
