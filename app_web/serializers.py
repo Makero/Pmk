@@ -10,8 +10,15 @@ class UserSerializer(serializers.ModelSerializer):
         # extra_kwargs = {'password': {'write_only': True}}
 
 
-class TokenSerializer(serializers.ModelSerializer):
+class ArticleSerializer(serializers.ModelSerializer):
 
     class Meta:
-        model = models.Token
+        model = models.Article
+        fields = "__all__"
+
+
+class MoodSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = models.Mood
         fields = "__all__"

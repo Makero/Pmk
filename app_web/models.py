@@ -28,17 +28,6 @@ class User(models.Model):
         return self.username
 
 
-class Token(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
-    token = models.CharField(max_length=64)
-
-    class Meta:
-        app_label = "app_web"
-
-    def __str__(self):
-        return self.user
-
-
 class Article(models.Model):
     """文章"""
     ART_TYPE = (
@@ -46,7 +35,7 @@ class Article(models.Model):
         ('1', '经典语录'),
         ('2', '随记')
     )
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user_id = models.ForeignKey(User, db_column="user_id", on_delete=models.CASCADE)
     author = models.CharField('作者', max_length=30)
     title = models.CharField('标题', max_length=100)
     content = models.TextField('正文')
@@ -57,13 +46,16 @@ class Article(models.Model):
     class Meta:
         app_label = "app_web"
 
+    def __str__(self):
+        return self.title
+
 
 class Mood(models.Model):
     """心情"""
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user_id = models.ForeignKey(User, db_column="user_id", on_delete=models.CASCADE)
     name = models.CharField('发表人', max_length=30)
     create_time = models.DateTimeField('创建时间', default=timezone.now)
-    address = models.CharField('文章分类', max_length=100)
+    address = models.CharField('所在地', max_length=100)
     img_url = models.CharField('图片地址', max_length=120)
     content = models.CharField('内容', max_length=300)
     keyword = models.CharField('关键词', max_length=6)
@@ -71,6 +63,9 @@ class Mood(models.Model):
 
     class Meta:
         app_label = "app_web"
+
+    def __str__(self):
+        return self.name
 
 
 class Comment(models.Model):
@@ -88,6 +83,9 @@ class Comment(models.Model):
 
     class Meta:
         app_label = "app_web"
+
+    def __str__(self):
+        return self.from_user
 
 
 class Reply(models.Model):
@@ -108,3 +106,6 @@ class Reply(models.Model):
 
     class Meta:
         app_label = "app_web"
+
+    def __str__(self):
+        return self.from_user

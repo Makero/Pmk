@@ -34,7 +34,7 @@ class LoginView(APIView):
         return Response({'code': '40001', 'msg': '登录失败'}, status=status.HTTP_400_BAD_REQUEST)
 
 
-class CheckAuthToken(APIView):
+class CheckAuthTokenView(APIView):
     """ 验证authToken是否有效 """
     permission_classes = ()
     authentication_classes = ()
@@ -46,3 +46,15 @@ class CheckAuthToken(APIView):
         if len(user_data):
             return Response({'code': '20001', 'data': user_data}, status=status.HTTP_201_CREATED)
         return Response({'code': '40001', 'msg': 'authToken无效'}, status=status.HTTP_400_BAD_REQUEST)
+
+
+class ArticleViewSet(viewsets.ModelViewSet):
+    """ 文章 """
+    queryset = models.Article.objects.all()
+    serializer_class = serializers.ArticleSerializer
+
+
+class MoodViewSet(viewsets.ModelViewSet):
+    """ 心情 """
+    queryset = models.Mood.objects.all()
+    serializer_class = serializers.MoodSerializer
