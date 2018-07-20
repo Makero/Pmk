@@ -22,3 +22,17 @@ class MoodSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Mood
         fields = "__all__"
+
+
+class CommentSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = models.Comment
+        fields = "__all__"
+
+
+class ReplySerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = models.Reply
+        fields = "__all__"

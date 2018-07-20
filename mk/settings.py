@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
+    'django_filters',
     'app_wechat.apps.UsersConfig',
     'app_web.apps.WebConfig',
 ]
@@ -155,10 +156,15 @@ STATIC_URL = '/static/'
 
 
 REST_FRAMEWORK = {
+    'DEFAULT_PAGINATION_CLASS': 'app_web.pagination.Pagination',
     'DEFAULT_PERMISSION_CLASSES': (
         'rest_framework.permissions.IsAuthenticatedOrReadOnly',
     ),
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'app_web.auth.UserTokenAuthentication',
+    ),
+    'DEFAULT_FILTER_BACKENDS': (
+        'django_filters.rest_framework.DjangoFilterBackend',
+        'rest_framework.filters.SearchFilter',
     )
 }

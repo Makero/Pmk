@@ -50,11 +50,28 @@ class CheckAuthTokenView(APIView):
 
 class ArticleViewSet(viewsets.ModelViewSet):
     """ 文章 """
-    queryset = models.Article.objects.all()
+    permission_classes = ()
+    authentication_classes = ()
+
+    queryset = models.Article.objects.all().order_by('-create_time')
     serializer_class = serializers.ArticleSerializer
+    filter_fields = ('author', 'type')
+    search_fields = ('title', 'content', 'author')
 
 
 class MoodViewSet(viewsets.ModelViewSet):
     """ 心情 """
     queryset = models.Mood.objects.all()
     serializer_class = serializers.MoodSerializer
+
+
+class CommentViewSet(viewsets.ModelViewSet):
+    """ 评论 """
+    queryset = models.Comment.objects.all()
+    serializer_class = serializers.CommentSerializer
+
+
+class ReplyViewSet(viewsets.ModelViewSet):
+    """ 回复 """
+    queryset = models.Reply.objects.all()
+    serializer_class = serializers.ReplySerializer
