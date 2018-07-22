@@ -3,7 +3,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from utils import basics
 from utils.redis import redis
-from app_web import models, serializers
+from app_web import models, serializers, filter
 
 
 class LoginView(APIView):
@@ -57,6 +57,7 @@ class ArticleViewSet(viewsets.ModelViewSet):
     serializer_class = serializers.ArticleSerializer
     filter_fields = ('author', 'type')
     search_fields = ('title', 'content', 'author')
+    filter_class = filter.ArticleDateFilter
 
 
 class MoodViewSet(viewsets.ModelViewSet):
