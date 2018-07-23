@@ -35,7 +35,7 @@ class LoginView(APIView):
 
 
 class CheckAuthTokenView(APIView):
-    """ 验证authToken是否有效 """
+    """ 验证authToken是否有效  """
     permission_classes = ()
     authentication_classes = ()
 

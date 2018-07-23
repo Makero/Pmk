@@ -17,6 +17,3 @@ class UserTokenAuthentication(BaseAuthentication):
         if token_obj:
             return token_obj['user'], request.META.get('HTTP_TOKEN')
         raise exceptions.AuthenticationFailed("认证失败")
-
-    # def authenticate_header(self, request):
-    #     pass
