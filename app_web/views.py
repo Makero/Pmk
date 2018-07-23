@@ -62,17 +62,21 @@ class ArticleViewSet(viewsets.ModelViewSet):
 
 class MoodViewSet(viewsets.ModelViewSet):
     """ 心情 """
-    queryset = models.Mood.objects.all()
+    queryset = models.Mood.objects.all().order_by('-create_time')
     serializer_class = serializers.MoodSerializer
+    filter_fields = ('user_id',)
+    filter_class = filter.MoodDateFilter
 
 
 class CommentViewSet(viewsets.ModelViewSet):
     """ 评论 """
-    queryset = models.Comment.objects.all()
+    queryset = models.Comment.objects.all().order_by('-comment_time')
     serializer_class = serializers.CommentSerializer
+    filter_fields = ('topic_id',)
 
 
 class ReplyViewSet(viewsets.ModelViewSet):
     """ 回复 """
     queryset = models.Reply.objects.all()
     serializer_class = serializers.ReplySerializer
+    filter_fields = ('reply_id',)

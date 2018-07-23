@@ -7,7 +7,7 @@ class UserTokenAuthentication(BaseAuthentication):
 
     def authenticate(self, request):
         try:
-            name = "authToken:"+request.data['token']
+            name = "authToken:"+request.META.get('HTTP_TOKEN')
         except KeyError:
             raise exceptions.AuthenticationFailed("认证失败")
 
@@ -15,7 +15,7 @@ class UserTokenAuthentication(BaseAuthentication):
         token_obj = rs.get_redis(name=name)
 
         if token_obj:
-            return token_obj['user'], token_obj
+            return token_obj['user'], request.META.get('HTTP_TOKEN')
         raise exceptions.AuthenticationFailed("认证失败")
 
     # def authenticate_header(self, request):
