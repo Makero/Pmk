@@ -116,6 +116,9 @@ class MsgHandle:
             authkey = auth.AuthKey(self.userName).query_or_create()
             self.msg.reply_text(authkey)
 
+        elif content.replace(' ', '').lower() == '@home':
+            self.msg.reply_news(pr.HOME)
+
         else:
             val = rs.get_redis(name='message', key=self.userName)
             if val is None:

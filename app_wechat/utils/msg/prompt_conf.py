@@ -9,15 +9,29 @@ WELCOME_FIRST = '''欢迎你哦～
 WELCOME_AGAIN = '😯你终于又回来啦。😢我好想你呢～，答应我不要再离开我'
 
 INSTRUCTIONS = {
-                'ArticleCount': 1,
-                'Articles': {
-                    'item': [
-                        {
-                            'Title': '和晗晗成为好朋友的必修课',
-                            'Description': '主要讲解公众号所提供的功能和使用方法',
-                            'PicUrl': 'https://mmbiz.qpic.cn/mmbiz_jpg/y1nlcyGpibk2qga7aTnYp2Ficdo6L174XdHGDFLevRseWibJ32eHdFIc3F85sIYib4J9JicjYnqqdZxTCWOeW4FZGdg/0?wx_fmt=jpeg',
-                            'Url': 'http://192.168.1.119:3000/instructions',
-                        }
-                    ],
-                }
+    'ArticleCount': 1,
+    'Articles': {
+        'item': [
+            {
+                'Title': '和晗晗成为好朋友的必修课',
+                'Description': '主要讲解公众号所提供的功能和使用方法',
+                'PicUrl': 'https://mmbiz.qpic.cn/mmbiz_jpg/y1nlcyGpibk2qga7aTnYp2Ficdo6L174XdHGDFLevRseWibJ32eHdFIc3F85sIYib4J9JicjYnqqdZxTCWOeW4FZGdg/0?wx_fmt=jpeg',
+                'Url': 'http://192.168.1.119:3000/instructions',
             }
+        ],
+    }
+}
+
+HOME = {
+    'ArticleCount': 1,
+    'Articles': {
+        'item': [
+            {
+                'Title': '个人主页',
+                'Description': '所有功能都能在主页找到哦～',
+                'PicUrl': 'https://mmbiz.qpic.cn/mmbiz_jpg/y1nlcyGpibk2qga7aTnYp2Ficdo6L174XdHGDFLevRseWibJ32eHdFIc3F85sIYib4J9JicjYnqqdZxTCWOeW4FZGdg/0?wx_fmt=jpeg',
+                'Url': 'http://www.20mk.cn/wechat/home',
+            }
+        ],
+    }
+}
