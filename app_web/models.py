@@ -39,6 +39,7 @@ class Article(models.Model):
     author = models.CharField('作者', max_length=30)
     title = models.CharField('标题', max_length=100)
     content = models.TextField('正文')
+    abstract = models.CharField('摘要', max_length=160)
     create_time = models.DateTimeField('创建时间', default=timezone.now)
     revise_time = models.DateTimeField('修改时间', null=True, blank=True)
     type = models.CharField('文章分类', max_length=1, choices=ART_TYPE)

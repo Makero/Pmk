@@ -62,6 +62,8 @@ class ArticleViewSet(viewsets.ModelViewSet):
 
 class MoodViewSet(viewsets.ModelViewSet):
     """ 心情 """
+    permission_classes = ()
+    authentication_classes = ()
     queryset = models.Mood.objects.all().order_by('-create_time')
     serializer_class = serializers.MoodSerializer
     filter_fields = ('user_id',)
