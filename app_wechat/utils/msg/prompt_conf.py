@@ -35,3 +35,17 @@ HOME = {
         ],
     }
 }
+
+AUTH = {
+    'ArticleCount': 1,
+    'Articles': {
+        'item': [
+            {
+                'Title': '身份认证',
+                'Description': '认证身份后可以使用平台所有功能哦～',
+                'PicUrl': 'https://mmbiz.qpic.cn/mmbiz_png/y1nlcyGpibk21ycqSo1m6m2XPanWMianJQMSsibLqliawbISD2NbZ0EMzbHV3L4iadP1H4voDXEMWk7VjiaamlX6L1pw/0?wx_fmt=png',
+                'Url': 'http://www.20mk.cn/wechat/auth',
+            }
+        ],
+    }
+}

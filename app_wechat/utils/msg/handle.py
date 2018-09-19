@@ -119,6 +119,9 @@ class MsgHandle:
         elif content.replace(' ', '').lower() == '@home':
             self.msg.reply_news(pr.HOME)
 
+        elif content.replace(' ', '').lower() == '@auth':
+            self.msg.reply_news(pr.AUTH)
+
         else:
             val = rs.get_redis(name='message', key=self.userName)
             if val is None:
