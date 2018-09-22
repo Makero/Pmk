@@ -23,4 +23,5 @@ JSAPI_URLS = {
     'talk': "http://www.20mk.cn/wechat/talk",
     'tools': "http://www.20mk.cn/wechat/tools",
     'auth': "http://www.20mk.cn/wechat/auth",
+    'gift': "http://www.20mk.cn/wechat/gift",
 }
