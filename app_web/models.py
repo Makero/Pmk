@@ -61,6 +61,7 @@ class Mood(models.Model):
     content = models.CharField('内容', max_length=300)
     keyword = models.CharField('关键词', max_length=6)
     weather = models.CharField('天气', max_length=10)
+    power = models.CharField('权限', max_length=1)
 
     class Meta:
         app_label = "app_web"
