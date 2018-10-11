@@ -8,7 +8,9 @@ from app_wechat.utils.auth import auth
 from utils.AI import chat
 from utils.redis import redis
 from app_web import models, serializers
-
+from urllib import request as req
+import ssl
+ssl._create_default_https_context = ssl._create_unverified_context
 
 class ValidateTokenView(APIView):
     """ 微信公众号调用平台时的token验证 """
@@ -129,3 +131,18 @@ class MusicLRCView(APIView):
     def get(self, request):
         result = handle.Search().music_lrc(request.data.get('songid'))
         return Response({'code': '20001', 'data': result}, status=status.HTTP_201_CREATED)
+
+
+class SaveImage(APIView):
+    """保存图片"""
+    permission_classes = ()
+    authentication_classes = ()
+
+    def get(self, request):
+        rs = redis.Redis()
+        access_token = rs.get_redis(name='wechat', key='access_token')
+        serverId = request.data.get('serverId')
+        img_link = wc.API_URL['save_image'] + "?access_token=" + access_token + "&media_id=" + serverId
+        path = "/home/mkfile/upload/" + serverId + ".jpg"
+        req.urlretrieve(img_link, path)
+        return Response({'code': '20001', 'data': {'url': 'http://www.20mk.cn/mkfile/upload/' + serverId + ".jpg"}}, status=status.HTTP_201_CREATED)

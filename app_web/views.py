@@ -55,7 +55,6 @@ class ArticleViewSet(viewsets.ModelViewSet):
 
     queryset = models.Article.objects.all().order_by('-create_time')
     serializer_class = serializers.ArticleSerializer
-    filter_fields = ('author', 'type')
     search_fields = ('title', 'content', 'author')
     filter_class = filter.ArticleDateFilter
 
@@ -66,7 +65,6 @@ class MoodViewSet(viewsets.ModelViewSet):
     authentication_classes = ()
     queryset = models.Mood.objects.all().order_by('-create_time')
     serializer_class = serializers.MoodSerializer
-    filter_fields = ('user_id',)
     filter_class = filter.MoodDateFilter
 
 

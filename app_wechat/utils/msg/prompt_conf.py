@@ -16,7 +16,7 @@ INSTRUCTIONS = {
                 'Title': '和晗晗成为好朋友的必修课',
                 'Description': '主要讲解公众号所提供的功能和使用方法',
                 'PicUrl': 'https://mmbiz.qpic.cn/mmbiz_jpg/y1nlcyGpibk2qga7aTnYp2Ficdo6L174XdHGDFLevRseWibJ32eHdFIc3F85sIYib4J9JicjYnqqdZxTCWOeW4FZGdg/0?wx_fmt=jpeg',
-                'Url': 'http://192.168.1.119:3000/instructions',
+                'Url': 'http://www.20mk.cn/wechat/instructions',
             }
         ],
     }

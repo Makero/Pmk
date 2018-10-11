@@ -10,4 +10,5 @@ urlpatterns = [
     url(r'^music_lrc', views.MusicLRCView.as_view()),
     url(r'^wx_config', views.WxConfigView.as_view()),
     url(r'^auth', views.UserAuthView.as_view()),
+    url(r'^save_image', views.SaveImage.as_view()),
 ]

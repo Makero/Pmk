@@ -8,6 +8,7 @@
 API_URL = {
     'access_token': 'https://api.weixin.qq.com/cgi-bin/token',
     'jsapi_ticket': 'https://api.weixin.qq.com/cgi-bin/ticket/getticket',
+    'save_image': "https://api.weixin.qq.com/cgi-bin/media/get",
 }
 
 # 接入服务器时配置的token

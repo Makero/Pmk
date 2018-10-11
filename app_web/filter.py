@@ -9,7 +9,7 @@ class ArticleDateFilter(django_filters.rest_framework.FilterSet):
 
     class Meta:
         model = models.Article
-        fields = ('min_date', 'max_date')
+        fields = ('min_date', 'max_date', 'author', 'type')
 
 
 class MoodDateFilter(django_filters.rest_framework.FilterSet):
@@ -19,4 +19,4 @@ class MoodDateFilter(django_filters.rest_framework.FilterSet):
 
     class Meta:
         model = models.Mood
-        fields = ('min_date', 'max_date')
+        fields = ('min_date', 'max_date', 'user_id')
